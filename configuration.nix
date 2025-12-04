@@ -126,13 +126,17 @@
   networking.networkmanager = {
     enable = true;
   };
-  # Use systemd but reduce startup time.
-  systemd.network = {
-    enable = true;
-    wait-online.enable = false;
-  };
+  # Use systemd to manage networks.
+  systemd.network.enable = true;
   networking.useNetworkd = true;
-  systemd.services.systemd-user-sessions.enable = false;
+  # Reduce startup time.
+  systemd.services = {
+    systemd-user-sessions.enable = false;
+    wait-online.enable = false;
+    NetworkManager.wait-online.enable = false;
+    systemd-udev-settle.enable = false;
+
+  };
   # Enable firewall.
   networking.firewall.enable = true;
   # Enable bluetooth.

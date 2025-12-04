@@ -22,7 +22,13 @@
         size = "100%";
         content = {
           type = "btrfs";
-          extraArgs = [ "-f" ]; # Override existing partition
+          extraArgs = [
+            # Override existing partition.
+            "-f"
+            # Label partition.
+            "-L"
+            "nixos"
+          ];
           subvolumes = {
             "/root" = {
               mountpoint = "/";
@@ -57,8 +63,18 @@
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/etc/NetworkManager/system-connections"
+      "/var/lib/NetworkManager"
+      "/etc/nixos"
     ];
     files = [ "/etc/machine-id" ];
+    users.nathaniel = {
+      directories = [
+        "nix"
+        "tmp"
+        "all"
+        ".ssh"
+      ];
+    };
   };
 
   # BOOT
@@ -68,8 +84,10 @@
       systemd-boot.enable = true;
       efi.canTouchEfiVariables = true;
     };
-    # Use tmpfs for /tmp.
-    tmp.useTmpfs = true;
+    tmp = {
+      cleanOnBoot = true;
+      useTmpfs = true;
+    };
     initrd.availableKernelModules = [
       "nvme"
       "xhci_pci"
@@ -84,11 +102,13 @@
       priority = 1500;
       content = ''
         mkdir /btrfs_tmp
-        mount /dev/disk/by-uuid/db68b423-ad14-4945-854f-ae5691354b6e /btrfs_tmp
+
+        mount /dev/nvme0n1 /btrfs_tmp
         if [[ -e /btrfs_tmp/root ]]; then
             mkdir -p /btrfs_tmp/old_roots
             mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%dT%H:%M:%S")"
         fi
+
         delete_subvolume_recursively() {
             IFS=$'\n'
             for name in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
@@ -99,6 +119,7 @@
         for name in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +30); do
             delete_subvolume_recursively "$name"
         done
+
         btrfs subvolume create /btrfs_tmp/root
         umount /btrfs_tmp
       '';

@@ -8,7 +8,10 @@ let
     // (if path == null then value else lib.setAttrByPath (lib.strings.splitString "." path) value);
 in
 {
-  imports = [ inputs.niri.homeModules.niri ];
+  imports = [
+    inputs.niri.homeModules.niri
+    inputs.impermanence.homeManagerModules.impermanence
+  ];
   home.packages = with pkgs; [
     # SYSTEM
     xdg-desktop-portal-gtk
