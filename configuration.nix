@@ -75,20 +75,7 @@
       "networkmanager"
     ];
   };
-  security.sudo.extraRules = [
-    {
-      users = [ "nathaniel" ];
-      commands = [
-        {
-          command = "ALL";
-          options = [
-            "SETENV"
-            "NOPASSWD"
-          ];
-        }
-      ];
-    }
-  ];
+  security.sudo.wheelNeedsPassword = false;
 
   # Configure bash.
   programs.bash = {
