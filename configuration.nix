@@ -1,18 +1,26 @@
 { lib, pkgs, ... }@inputs:
 {
   # NIX
-  nix.settings = {
-    experimental-features = [
-      "nix-command"
-      "flakes"
-      "pipe-operators"
-    ];
-    # Replace duplicate files with hard links to a single copy.
-    auto-optimise-store = true;
-    # Change location of Nix symlinks to reduce clutter in home directory.
-    use-xdg-base-directories = true;
-    # Ensure relative path literals start with `./` or `../`.
-    warn-short-path-literals = true;
+  nix = {
+    settings = {
+      experimental-features = [
+        "nix-command"
+        "flakes"
+        "pipe-operators"
+      ];
+      # Replace duplicate files with hard links to a single copy.
+      auto-optimise-store = true;
+      # Change location of Nix symlinks to reduce clutter in home directory.
+      use-xdg-base-directories = true;
+      # Ensure relative path literals start with `./` or `../`.
+      warn-short-path-literals = true;
+    };
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than=14d";
+    };
+    optimise.automatic = true;
   };
   # Copy NixOS configuration file and link from resulting system.
   system.copySystemConfiguration = true;
@@ -32,6 +40,7 @@
     ];
     files = [ "/etc/machine-id" ];
   };
+  fileSystems."/persist".neededForBoot = true;
 
   # BOOT
   boot = {
@@ -55,6 +64,8 @@
     kernelModules = [ "kvm-amd" ];
     extraModulePackages = [ ];
   };
+  # Rollback after boot.
+  boot.initrd.postDeviceCommands = lib.mkAfter "zfs rollback -r rpool/local/root@blank";
   # Set default host platform.
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # Inherit hardware configuration.

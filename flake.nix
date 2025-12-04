@@ -40,6 +40,8 @@
         inputs.auto-cpufreq.nixosModules.default
         inputs.impermanence.nixosModules.default
         inputs.home-manager.nixosModules.default
+        ./disk.nix
+        ./configuration.nix
         {
           nixpkgs.overlays = [
             inputs.zig.overlays.default
@@ -51,7 +53,6 @@
             users.nathaniel = import ./home.nix;
           };
         }
-        ./configuration.nix
       ];
     };
   };
