@@ -208,8 +208,8 @@ in
     sessionVariables = {
       LESSHISTFILE = "-";
       HISTFILE = "$HOME/save/histfile";
-      HISTFILESIZE = 536870912;
       HISTSIZE = 1048576;
+      HISTFILESIZE = 536870912;
       DENO_COVERAGE_DIR = "/tmp/deno-coverage";
     };
     shellOptions = [
@@ -221,33 +221,17 @@ in
       "histverify"
       "nullglob"
     ];
-    shellAliases = {
-      "cd.." = "cd ..";
-      "..." = "cd ../..";
-      "...." = "cd ../../..";
-      "....." = "cd ../../../..";
-    };
-    initExtra = # bash
-      ''
-        [[ -n "$PROMPT_COMMAND" ]] && PROMPT_COMMAND+="; history -a" || PROMPT_COMMAND="history -a"
-        awk 'NR==FNR && !/^#/{lines[$0]=FNR;next} lines[$0]==FNR' "$HISTFILE" "$HISTFILE" >>"$HISTFILE.compressed" && mv --force "$HISTFILE.compressed" "$HISTFILE"
+    initExtra = ''
+      [[ -n "$PROMPT_COMMAND" ]] && PROMPT_COMMAND+="; history -a" || PROMPT_COMMAND="history -a"
+      awk 'NR==FNR && !/^#/{lines[$0]=FNR;next} lines[$0]==FNR' "$HISTFILE" "$HISTFILE" >>"$HISTFILE.compressed" && mv --force "$HISTFILE.compressed" "$HISTFILE"
 
-        unalias l
-        unalias ll
-        unalias ls
-        alias l='lsd --icon=never'
-        alias la='lsd --almost-all'
-        alias ll='lsd --long --almost-all'
-        alias lt='lsd --tree'
-        _completion_loader lsd
-        for command in l la ll lt; do
-            complete -o bashdefault -o default -o nosort -F _lsd "$command"
-        done
-
-        alias sc='systemctl'
-        _completion_loader systemctl
-        complete -F _systemctl sc
-      '';
+      _completion_loader lsd
+      for command in l la ll lt; do
+          complete -o bashdefault -o default -o nosort -F _lsd "$command"
+      done
+      _completion_loader systemctl
+      complete -F _systemctl sc
+    '';
   };
 
   # HELIX

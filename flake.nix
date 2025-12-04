@@ -3,6 +3,10 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    disko = {
+      url = "github:nix-community/disko";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     impermanence.url = "github:nix-community/impermanence";
     auto-cpufreq = {
       url = "github:AdnanHodzic/auto-cpufreq";
@@ -29,11 +33,13 @@
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
+      specialArgs = inputs;
       modules = [
         inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
+        inputs.disko.nixosModules.default
         inputs.auto-cpufreq.nixosModules.default
-        inputs.impermanence.nixosModules.impermanence
-        inputs.home-manager.nixosModules.home-manager
+        inputs.impermanence.nixosModules.default
+        inputs.home-manager.nixosModules.default
         {
           nixpkgs.overlays = [
             inputs.zig.overlays.default
@@ -42,7 +48,6 @@
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
-            extraSpecialArgs = { inherit (inputs) helix niri ghostty; };
             users.nathaniel = import ./home.nix;
           };
         }

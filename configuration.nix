@@ -19,6 +19,20 @@
   # DO NOT EDIT!
   system.stateVersion = "25.05";
 
+  # IMPERMANENCE
+  environment.persistence."/persist" = {
+    hideMounts = true;
+    directories = [
+      "/var/log"
+      "/var/lib/bluetooth"
+      "/var/lib/fprint"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/etc/NetworkManager/system-connections"
+    ];
+    files = [ "/etc/machine-id" ];
+  };
+
   # BOOT
   boot = {
     # Use the systemd-boot EFI boot loader.
@@ -45,71 +59,10 @@
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   # Inherit hardware configuration.
   imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];
+  swapDevices = [ ];
   hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
   # Enable updater.
   services.fwupd.enable = true;
-  # Define filesystems.
-  fileSystems =
-    let
-      subvolume = subvol: neededForBoot: {
-        inherit neededForBoot;
-        device = "/dev/disk/by-uuid/db68b423-ad14-4945-854f-ae5691354b6e";
-        fsType = "btrfs";
-        options = [
-          "subvol=${subvol}"
-          "compress=zstd"
-          "noatime"
-        ];
-      };
-    in
-    {
-      "/" = subvolume "root" false;
-      "/home" = subvolume "home" false;
-      "/nix" = subvolume "nix" false;
-      "/persist" = subvolume "persist" true;
-      "/var/log" = subvolume "log" true;
-      "/boot" = {
-        device = "/dev/disk/by-uuid/569D-30EB";
-        fsType = "vfat";
-        options = [ "umask=0077" ];
-      };
-    };
-  swapDevices = [ ];
-  # Erase old volumes.
-  boot.initrd.postResumeCommands = lib.mkAfter ''
-    mkdir /btrfs_tmp
-    mount /dev/disk/by-uuid/db68b423-ad14-4945-854f-ae5691354b6e /btrfs_tmp
-    if [[ -e /btrfs_tmp/root ]]; then
-        mkdir -p /btrfs_tmp/old_roots
-        mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%dT%H:%M:%S")"
-    fi
-    delete_subvolume_recursively() {
-        IFS=$'\n'
-        for name in $(btrfs subvolume list -o "$1" | cut -f 9- -d ' '); do
-            delete_subvolume_recursively "/btrfs_tmp/$name"
-        done
-        btrfs subvolume delete "$1"
-    }
-    for name in $(find /btrfs_tmp/old_roots/ -maxdepth 1 -mtime +30); do
-        delete_subvolume_recursively "$name"
-    done
-    btrfs subvolume create /btrfs_tmp/root
-    umount /btrfs_tmp
-  '';
-  # Persist certain directories.
-  environment.persistence."/persist" = {
-    hideMounts = true;
-    directories = [
-      "/etc/NetworkManager"
-      "/etc/nixos"
-      "/etc/ssh"
-      "/var/lib/nixos"
-      "/var/lib/systemd"
-      "/var/lib/bluetooth"
-      "/var/lib/fprint"
-    ];
-    files = [ "/etc/machine-id" ];
-  };
   # Enable some minor hardening.
   boot.kernel.sysctl = {
     "fs.protected_fifos" = 2;
@@ -177,6 +130,17 @@
         mandoc.enable = true;
       };
     };
+    shellAliases = {
+      "cd.." = "cd ..";
+      "..." = "cd ../..";
+      "...." = "cd ../../..";
+      "....." = "cd ../../../..";
+      "l" = "lsd --icon=never";
+      "la" = "lsd --almost-all";
+      "ll" = "lsd --long --almost-all";
+      "lt" = "lsd --tree";
+      "sc" = "systemctl";
+    };
   };
   # Use auto-cpufreq to manage power.
   services.auto-cpufreq.enable = true;
@@ -184,7 +148,7 @@
 
   # NETWORK
   networking.hostName = "fw";
-  networking.useDHCP = true;
+  networking.useDHCP = lib.mkDefault true;
   # Configure NetworkManager.
   networking.networkmanager = {
     enable = true;
@@ -275,12 +239,11 @@
   };
   # Enable udisks to manage external USB drives.
   services.udisks2.enable = true;
+  # Enable clipboard monitor.
   services.ringboard.wayland.enable = true;
 
   # OUTPUT
-  # Enable printing.
   services.printing.enable = true;
-  # Enable sound.
   services.pipewire = {
     enable = true;
     pulse.enable = true;
