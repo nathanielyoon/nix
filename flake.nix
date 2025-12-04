@@ -3,29 +3,17 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     home-manager = {
       url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    helix = {
-      url = "github:helix-editor/helix/master";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    ghostty = {
-      url = "github:ghostty-org/ghostty";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     zig.url = "github:mitchellh/zig-overlay";
@@ -36,17 +24,14 @@
       specialArgs = inputs;
       modules = [
         inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
-        inputs.disko.nixosModules.default
         inputs.auto-cpufreq.nixosModules.default
+        inputs.disko.nixosModules.default
         inputs.impermanence.nixosModules.default
-        inputs.home-manager.nixosModules.default
         ./boot.nix
         ./configuration.nix
+        inputs.home-manager.nixosModules.default
         {
-          nixpkgs.overlays = [
-            inputs.zig.overlays.default
-            inputs.niri.overlays.niri
-          ];
+          nixpkgs.overlays = [ inputs.zig.overlays.default ];
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;

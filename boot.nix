@@ -1,5 +1,5 @@
 {
-  # DISKS
+  # Declare filesystems.
   disko.devices.disk.main = {
     type = "disk";
     device = "/dev/nvme0n1";
@@ -52,32 +52,27 @@
     "/persist".neededForBoot = true;
   };
   swapDevices = [ ];
-
-  # IMPERMANENCE
   environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
       "/var/log"
-      "/var/lib/bluetooth"
-      "/var/lib/fprint"
-      "/var/lib/nixos"
       "/var/lib/systemd/coredump"
-      "/etc/NetworkManager/system-connections"
+      "/var/lib/nixos"
+      "/var/lib/fprint"
+      "/var/lib/bluetooth"
       "/var/lib/NetworkManager"
-      "/etc/nixos"
+      "/etc/NetworkManager/system-connections"
     ];
     files = [ "/etc/machine-id" ];
-    users.nathaniel = {
-      directories = [
-        "nix"
-        "tmp"
-        "all"
-        ".ssh"
-      ];
-    };
+    users.nathaniel.directories = [
+      "nix"
+      "tmp"
+      "all"
+      ".ssh"
+    ];
   };
 
-  # BOOT
+  # Configure boot.
   boot = {
     # Use the systemd-boot EFI boot loader.
     loader = {
@@ -88,14 +83,6 @@
       cleanOnBoot = true;
       useTmpfs = true;
     };
-    initrd.availableKernelModules = [
-      "nvme"
-      "xhci_pci"
-      "thunderbolt"
-      "usb_storage"
-      "sd_mod"
-    ];
-    initrd.kernelModules = [ "kvm-amd" ];
     # Erase old volumes.
     initrd.postResumeCommands = {
       _type = "order";
@@ -124,7 +111,5 @@
         umount /btrfs_tmp
       '';
     };
-    kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [ ];
   };
 }
