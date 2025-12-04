@@ -27,7 +27,7 @@
     zig.url = "github:mitchellh/zig-overlay";
   };
   outputs = inputs: {
-    nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem rec {
+    nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
@@ -39,7 +39,6 @@
             inputs.zig.overlays.default
             inputs.niri.overlays.niri
           ];
-          environment.systemPackages = [ inputs.helix.packages."${system}".helix ];
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;

@@ -153,6 +153,7 @@
   # ENVIRONMENT
   environment.systemPackages = with pkgs; [
     # Required for managing the nix repository.
+    inputs.helix.packages."${stdenv.hostPlatform.system}".helix
     git
     gh
     # For reading.
