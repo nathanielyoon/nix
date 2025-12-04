@@ -40,7 +40,7 @@
         inputs.auto-cpufreq.nixosModules.default
         inputs.impermanence.nixosModules.default
         inputs.home-manager.nixosModules.default
-        ./disk.nix
+        ./boot.nix
         ./configuration.nix
         {
           nixpkgs.overlays = [

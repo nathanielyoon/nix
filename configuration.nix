@@ -27,51 +27,13 @@
   # DO NOT EDIT!
   system.stateVersion = "25.05";
 
-  # IMPERMANENCE
-  environment.persistence."/persist" = {
-    hideMounts = true;
-    directories = [
-      "/var/log"
-      "/var/lib/bluetooth"
-      "/var/lib/fprint"
-      "/var/lib/nixos"
-      "/var/lib/systemd/coredump"
-      "/etc/NetworkManager/system-connections"
-    ];
-    files = [ "/etc/machine-id" ];
-  };
-  fileSystems."/persist".neededForBoot = true;
-
-  # BOOT
-  boot = {
-    # Use the systemd-boot EFI boot loader.
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    # Use tmpfs for /tmp.
-    tmp.useTmpfs = true;
-    # Set kernel modules.
-    kernelPackages = pkgs.linuxPackages_latest;
-    initrd.availableKernelModules = [
-      "nvme"
-      "xhci_pci"
-      "thunderbolt"
-      "usb_storage"
-      "sd_mod"
-    ];
-    initrd.kernelModules = [ "kvm-amd" ];
-    kernelModules = [ "kvm-amd" ];
-    extraModulePackages = [ ];
-  };
-  # Rollback after boot.
-  boot.initrd.postDeviceCommands = lib.mkAfter "zfs rollback -r rpool/local/root@blank";
   # Set default host platform.
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
+  # Set kernel modules.
+  boot.kernelPackages = pkgs.linuxPackages_latest;
   # Inherit hardware configuration.
   imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];
-  swapDevices = [ ];
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
   # Enable updater.
   services.fwupd.enable = true;
   # Enable some minor hardening.
