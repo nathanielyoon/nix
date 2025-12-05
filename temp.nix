@@ -1,6 +1,15 @@
 { pkgs, config, ... }@inputs:
 {
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+  };
+  environment.pathsToLink = [
+    /share/applications
+    /share/xdg-desktop-portal
+  ];
   home.packages = with pkgs; [
+    xdg-desktop-portal-gtk
     vscode-langservers-extracted
     clang-tools
     marksman
