@@ -1,9 +1,5 @@
 { pkgs, config, ... }@inputs:
 {
-  xdg.portal = {
-    enable = true;
-    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
-  };
   home.packages = with pkgs; [
     vscode-langservers-extracted
     clang-tools

@@ -14,7 +14,6 @@ in
 
   # Include packages and scripts.
   home.packages = with pkgs; [
-    xdg-desktop-portal-gtk
     (writeShellScriptBin "bri" ''
       FILE=/sys/class/backlight/amdgpu_bl1/brightness
       PREV=$(<$FILE)
