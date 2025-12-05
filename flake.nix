@@ -20,7 +20,10 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zig.url = "github:mitchellh/zig-overlay";
+    zig = {
+      url = "github:mitchellh/zig-overlay";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
