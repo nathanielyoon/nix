@@ -1,7 +1,5 @@
 { pkgs, lib, ... }@inputs:
 {
-  programs.niri.enable = true;
-
   # Configure nix itself.
   nix = {
     settings = {
@@ -33,12 +31,6 @@
   networking.hostName = "fw";
   networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = true;
-  # networking.networkmanager = {
-  #   enable = true;
-  #   wifi.backend = "iwd";
-  # };
-  # networking.wireless.iwd.enable = true;
-  # networking.wireless.enable = true;
 
   # Set locale.
   i18n.defaultLocale = "en_US.UTF-8";
@@ -53,14 +45,15 @@
       noto-fonts-monochrome-emoji
     ];
   };
-  # console = {
-  #   font = "Lat2-Terminus16";
-  #   keyMap = "us";
-  # };
+  console = {
+    font = "Lat2-Terminus16";
+    keyMap = "us";
+  };
 
   # Configure boot.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  services.fwupd.enable = true;
+  # Takes a while to start up. Check if necessary.
+  # services.fwupd.enable = true;
   services.logrotate.enable = true;
   services.journald = {
     storage = "volatile";
@@ -118,14 +111,6 @@
     };
   };
 
-  # Reduce startup time.
-  # systemd.services = {
-  #   systemd-user-sessions.enable = false;
-  #   wait-online.enable = false;
-  #   NetworkManager.wait-online.enable = false;
-  #   systemd-udev-settle.enable = false;
-  # };
-
   # Enable dynamic linking.
   programs.nix-ld.enable = true;
 
@@ -139,19 +124,19 @@
   console.useXkbConfig = true;
 
   # Enable (unfree) fingerprint reader.
-  # systemd.services.fprintd = {
-  #   wantedBy = [ "multi-user.target" ];
-  #   serviceConfig.type = "simple";
-  # };
-  # services.fprintd = {
-  #   enable = true;
-  #   tod = {
-  #     enable = true;
-  #     driver = pkgs.libfprint-2-tod1-goodix;
-  #   };
-  # };
-  # nixpkgs.config.allowUnfreePredicate =
-  #   pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
+  systemd.services.fprintd = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.type = "simple";
+  };
+  services.fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-goodix;
+    };
+  };
+  nixpkgs.config.allowUnfreePredicate =
+    pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
 
   # Enable sound.
   services.pipewire = {
@@ -172,6 +157,7 @@
     "thunderbolt"
     # Enable external storage devices.
     "usb_storage"
+    "sd_mod"
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-amd" ];
