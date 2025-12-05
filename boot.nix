@@ -69,6 +69,7 @@
       "tmp"
       "all"
       ".ssh"
+      ".librewolf"
     ];
   };
 
@@ -90,7 +91,7 @@
       content = ''
         mkdir /btrfs_tmp
 
-        mount /dev/nvme0n1 /btrfs_tmp
+        mount /dev/nvme0n1p2 /btrfs_tmp
         if [[ -e /btrfs_tmp/root ]]; then
             mkdir -p /btrfs_tmp/old_roots
             mv /btrfs_tmp/root "/btrfs_tmp/old_roots/$(date --date="@$(stat -c %Y /btrfs_tmp/root)" "+%Y-%m-%dT%H:%M:%S")"

@@ -16,7 +16,10 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-    zig.url = "github:mitchellh/zig-overlay";
+    niri = {
+      url = "github:sodiboo/niri-flake";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
@@ -31,11 +34,17 @@
         ./configuration.nix
         inputs.home-manager.nixosModules.default
         {
-          nixpkgs.overlays = [ inputs.zig.overlays.default ];
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;
             users.nathaniel = import ./home.nix;
+            extraSpecialArgs = {
+              inherit (inputs) niri;
+              pkgs = import inputs.nixpkgs {
+                system = "x86_64-linux";
+                overlays = [ inputs.niri.overlays.niri ];
+              };
+            };
           };
         }
       ];

@@ -1,5 +1,7 @@
 { pkgs, lib, ... }@inputs:
 {
+  programs.niri.enable = true;
+
   # Configure nix itself.
   nix = {
     settings = {
@@ -25,25 +27,36 @@
       persistent = true;
     };
   };
-  system.copySystemConfiguration = true;
   system.stateVersion = "26.05";
 
-  # `hardware-configuration.nix`
-  imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];
-  boot.initrd.availableKernelModules = [
-    "nvme"
-    "xhci_pci"
-    "thunderbolt"
-    # Enable external storage devices.
-    "usb_storage"
-    # Can't remember what this one does. Something about wifi?
-    "sd_mod"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
-  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
-  hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
+  # Configure networking.
+  networking.hostName = "fw";
+  networking.useDHCP = lib.mkDefault true;
+  networking.networkmanager.enable = true;
+  # networking.networkmanager = {
+  #   enable = true;
+  #   wifi.backend = "iwd";
+  # };
+  # networking.wireless.iwd.enable = true;
+  # networking.wireless.enable = true;
+
+  # Set locale.
+  i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "America/New_York";
+
+  # Add fonts.
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.zed-mono
+      noto-fonts
+      noto-fonts-monochrome-emoji
+    ];
+  };
+  # console = {
+  #   font = "Lat2-Terminus16";
+  #   keyMap = "us";
+  # };
 
   # Configure boot.
   boot.kernelPackages = pkgs.linuxPackages_latest;
@@ -80,30 +93,17 @@
   # Add system-wide packages.
   environment.systemPackages = with pkgs; [
     git
+    gh
     curl
     wget
+    lsd
+    helix
   ];
 
   # Configure bash.
   programs.bash = {
     enable = true;
-    promptInit = ''
-      PS1='\W \$ '
-
-      if [[ -z "$PROMPT_COMMAND" ]]; then PROMPT_COMMAND="history -a";
-      else PROMPT_COMMAND+="; history -a"; fi
-
-      awk 'NR==FNR && !/^#/{lines[$0]=FNR;next} lines[$0]==FNR' "$HISTFILE" "$HISTFILE" >>"$HISTFILE.compressed" && mv --force "$HISTFILE.compressed" "$HISTFILE"
-    '';
     completion.enable = true;
-    documentation = {
-      dev.enable = true;
-      # Use mandoc instead of man-db.
-      man = {
-        man-db.enable = false;
-        mandoc.enable = true;
-      };
-    };
     shellAliases = {
       "cd.." = "cd ..";
       "..." = "cd ../..";
@@ -115,50 +115,15 @@
       "lt" = "lsd --tree";
       "sc" = "systemctl";
     };
-    # Load completions.
-    interactiveShellInit = ''
-      _completion_loader lsd
-      for command in l la ll lt; do
-          complete -o bashdefault -o default -o nosort -F _lsd "$command"
-      done
-      _completion_loader systemctl
-      complete -F _systemctl sc
-    '';
-  };
-
-  # Configure networking.
-  networking.hostName = "fw";
-  networking.useDHCP = lib.mkDefault true;
-  networking.networkmanager.enable = true;
-  systemd.network.enable = true;
-  networking.useNetworkd = true;
-  networking.firewall.enable = true;
-
-  # Set locale.
-  i18n.defaultLocale = "en_US.UTF-8";
-  time.timeZone = "America/New_York";
-
-  # Add fonts.
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      nerd-fonts.zed-mono
-      noto-fonts
-      noto-fonts-monochrome-emoji
-    ];
-  };
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
   };
 
   # Reduce startup time.
-  systemd.services = {
-    systemd-user-sessions.enable = false;
-    wait-online.enable = false;
-    NetworkManager.wait-online.enable = false;
-    systemd-udev-settle.enable = false;
-  };
+  # systemd.services = {
+  #   systemd-user-sessions.enable = false;
+  #   wait-online.enable = false;
+  #   NetworkManager.wait-online.enable = false;
+  #   systemd-udev-settle.enable = false;
+  # };
 
   # Enable dynamic linking.
   programs.nix-ld.enable = true;
@@ -173,19 +138,19 @@
   console.useXkbConfig = true;
 
   # Enable (unfree) fingerprint reader.
-  systemd.services.fprintd = {
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.type = "simple";
-  };
-  services.fprintd = {
-    enable = true;
-    tod = {
-      enable = true;
-      driver = pkgs.libfprint-2-tod1-goodix;
-    };
-  };
-  nixpkgs.config.allowUnfreePredicate =
-    pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
+  # systemd.services.fprintd = {
+  #   wantedBy = [ "multi-user.target" ];
+  #   serviceConfig.type = "simple";
+  # };
+  # services.fprintd = {
+  #   enable = true;
+  #   tod = {
+  #     enable = true;
+  #     driver = pkgs.libfprint-2-tod1-goodix;
+  #   };
+  # };
+  # nixpkgs.config.allowUnfreePredicate =
+  #   pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
 
   # Enable sound.
   services.pipewire = {
@@ -197,4 +162,19 @@
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
   services.udev.extraRules = ''SUBSYSTEM=="backlight", ENV{ID_BACKLIGHT_CLAMP}="0"'';
+
+  # `hardware-configuration.nix`
+  imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];
+  boot.initrd.availableKernelModules = [
+    "nvme"
+    "xhci_pci"
+    "thunderbolt"
+    # Enable external storage devices.
+    "usb_storage"
+  ];
+  boot.initrd.kernelModules = [ ];
+  boot.kernelModules = [ "kvm-amd" ];
+  boot.extraModulePackages = [ ];
+  nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+  hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
 }

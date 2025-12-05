@@ -3,6 +3,7 @@ let
   enable = path: value: { enable = true; } // lib.setAttrByPath path value;
 in
 {
+  imports = [ ./temp.nix ];
   # Configure home-manager.
   programs.home-manager = enable [ ] { };
   home = {
