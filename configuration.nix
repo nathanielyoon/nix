@@ -50,10 +50,6 @@
       noto-fonts-monochrome-emoji
     ];
   };
-  console = {
-    font = "Lat2-Terminus16";
-    keyMap = "us";
-  };
 
   # Configure boot.
   boot.kernelPackages = pkgs.linuxPackages_latest;
