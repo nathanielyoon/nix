@@ -20,6 +20,7 @@
       url = "github:sodiboo/niri-flake";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zig.url = "github:mitchellh/zig-overlay";
   };
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
@@ -34,6 +35,7 @@
         ./configuration.nix
         inputs.home-manager.nixosModules.default
         {
+          nixpkgs.overlays = [ inputs.zig.overlays.default ];
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;

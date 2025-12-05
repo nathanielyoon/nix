@@ -19,7 +19,6 @@
     rust-analyzer
     rustfmt
     zls
-    zig
     deno
     xh
   ];
