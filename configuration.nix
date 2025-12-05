@@ -77,6 +77,13 @@
   };
   security.sudo.wheelNeedsPassword = false;
 
+  # Add system-wide packages.
+  environment.systemPackages = with pkgs; [
+    git
+    curl
+    wget
+  ];
+
   # Configure bash.
   programs.bash = {
     enable = true;
