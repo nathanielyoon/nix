@@ -1,5 +1,10 @@
 { pkgs, lib, ... }@inputs:
 {
+  environment.pathsToLink = [
+    /share/applications
+    /share/xdg-desktop-portal
+  ];
+
   # Configure nix itself.
   nix = {
     settings = {
