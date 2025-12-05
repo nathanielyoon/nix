@@ -21,6 +21,7 @@
     zls
     deno
     xh
+    zig-shell-completions
   ];
   programs.helix.enable = true;
   programs.helix.settings = {

@@ -98,6 +98,7 @@
     wget
     lsd
     helix
+    zigpkgs.master
   ];
 
   # Configure bash.
