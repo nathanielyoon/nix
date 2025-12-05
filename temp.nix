@@ -1,4 +1,5 @@
-{ pkgs, config, ... }@inputs: {
+{ pkgs, config, ... }@inputs:
+{
   home.packages = with pkgs; [
     vscode-langservers-extracted
     clang-tools
@@ -18,6 +19,9 @@
     rust-analyzer
     rustfmt
     zls
+    zig
+    deno
+    xh
   ];
   programs.helix.enable = true;
   programs.helix.settings = {
@@ -395,7 +399,7 @@
 
     "global:ctrl+super+space=toggle_quick_terminal"
   ];
-    programs.librewolf = {
+  programs.librewolf = {
     enable = true;
     settings = {
       "webgl.disabled" = false;
@@ -565,7 +569,7 @@
       MoreFromMozilla = false;
     };
   };
-  
+
   imports = [ inputs.niri.homeModules.niri ];
   programs.niri.enable = true;
   programs.niri.package = pkgs.niri-unstable;
