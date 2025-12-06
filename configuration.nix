@@ -57,6 +57,14 @@
   };
   security.sudo.wheelNeedsPassword = false;
 
+  # Configure console.
+  programs.bash = {
+    completion.enable = true;
+    promptInit = ''
+      PS1='\W \$ '
+    '';
+  };
+
   # Add Niri.
   programs.niri.enable = true;
   environment.variables = {
