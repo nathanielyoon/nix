@@ -90,6 +90,7 @@
       "/var/lib/fprint"
       "/var/lib/bluetooth"
       "/var/lib/NetworkManager"
+      "/var/lib/iwd"
       "/etc/NetworkManager/system-connections"
     ];
     files = [ "/etc/machine-id" ];
