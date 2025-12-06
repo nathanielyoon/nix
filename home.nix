@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }@inputs:
+{ pkgs, lib, ... }:
 let
   enable = path: value: { enable = true; } // lib.setAttrByPath path value;
 in
@@ -76,8 +76,6 @@ in
           --header "open: homep[a]ge [s]ource" \
           --header-first
     '')
-    choose
-    sd
     clac
     libqalculate
     ffmpeg
@@ -176,14 +174,17 @@ in
     clock_format = "%X";
   };
   programs.chromium = enable [ "commandLineArgs" ] [ "--ozone-platform-hint=auto" ];
-  programs.fd = enable [ ] { };
+  programs.fd = enable [ ] {
+    hidden = true;
+    ignores = [ ".git/" ];
+  };
   programs.fzf = enable [ ] {
     enableBashIntegration = true;
     defaultOptions = [ "--no-mouse" ];
   };
   programs.jq = enable [ ] { };
   programs.lsd = enable [ ] {
-    enableBashIntegration = true;
+    enableBashIntegration = false;
     settings = {
       blocks = [
         "date"
@@ -203,7 +204,11 @@ in
       "nixos"
     ];
   };
-  programs.ripgrep = enable [ "arguments" ] [ "--smart-case" ];
+  programs.ripgrep = enable [ "arguments" ] [
+    "--smart-case"
+    "--hidden"
+    "--ignore-file=.git/"
+  ];
   programs.rtorrent = enable [ ] { };
   programs.tealdeer = enable [ "settings" "updates" "auto_update" ] true;
   programs.yt-dlp = enable [ ] { };

@@ -5,6 +5,12 @@
   environment.systemPackages = with pkgs; [
     git
     curl
+    lsd
+    ripgrep
+    fd
+    choose
+    sd
+    fzf
     helix
     zigpkgs.master
     zig-shell-completions
@@ -54,6 +60,21 @@
     completion.enable = true;
     promptInit = ''
       PS1='\W \$ '
+    '';
+    shellAliases = {
+      l = "lsd --icon=never";
+      la = "lsd --almost-all";
+      ll = "lsd --long";
+      lt = "lsd --tree";
+      sc = "systemctl";
+    };
+    interactiveShellInit = ''
+      _completion_loader lsd
+      for command in l la ll lt; do
+          complete -o bashdefault -o default -o nosort -F _lsd "$command"
+      done
+      _completion_loader systemctl
+      complete -F _systemctl sc
     '';
   };
 
