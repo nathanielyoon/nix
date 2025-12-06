@@ -68,7 +68,7 @@
       lt = "lsd --tree";
       sc = "systemctl";
     };
-    interactiveShellInit = ''
+    interactiveShellInit = lib.mkAfter ''
       _completion_loader lsd
       for command in l la ll lt; do
           complete -o bashdefault -o default -o nosort -F _lsd "$command"
