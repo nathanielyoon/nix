@@ -39,9 +39,7 @@
   networking.networkmanager = {
     enable = true;
     wifi.backend = "iwd";
-    settings = {
-      wifi.powersave = 2;
-    };
+    settings.wifi.powersave = 2;
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
@@ -65,12 +63,17 @@
       l = "lsd --icon=never";
       la = "lsd --almost-all";
       ll = "lsd --long";
+      lla = "lsd --long --almost-all";
       lt = "lsd --tree";
+      lta = "lsd --tree --almost-all";
+      llt = "lsd --tree --long";
+      llta = "lsd --tree --long --almost-all";
       sc = "systemctl";
+      "cd.." = "cd ..";
     };
     interactiveShellInit = lib.mkAfter ''
       _completion_loader lsd
-      for command in l la ll lt; do
+      for command in l la ll lla lt lta; do
           complete -o bashdefault -o default -o nosort -F _lsd "$command"
       done
       _completion_loader systemctl
