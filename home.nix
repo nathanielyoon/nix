@@ -204,11 +204,7 @@ in
       "nixos"
     ];
   };
-  programs.ripgrep = enable [ "arguments" ] [
-    "--smart-case"
-    "--hidden"
-    "--glob=\"! .git/\""
-  ];
+  programs.ripgrep = enable [ "arguments" ] [ "--smart-case" ];
   programs.rtorrent = enable [ ] { };
   programs.tealdeer = enable [ "settings" "updates" "auto_update" ] true;
   programs.yt-dlp = enable [ ] { };
