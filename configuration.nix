@@ -25,12 +25,18 @@
   # Configure networking.
   networking.hostName = "fw";
   networking.useDHCP = lib.mkDefault true;
-  networking.networkmanager.enable = true;
-  networking.networkmanager.wifi.backend = "iwd";
   networking.wireless.iwd.enable = true;
+  # Set region for wifi. See <https://community.frame.work/t/42901/21>.
   boot.extraModprobeConfig = ''
     options cfg80211 ieee80211_regdom=US
   '';
+  networking.networkmanager = {
+    enable = true;
+    wifi.backend = "iwd";
+    settings = {
+      wifi.powersave = 2;
+    };
+  };
   boot.kernelPackages = pkgs.linuxPackages_latest;
 
   # Define user.
