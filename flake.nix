@@ -3,27 +3,11 @@
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     nixos-hardware.url = "github:NixOS/nixos-hardware/master";
-    auto-cpufreq = {
-      url = "github:AdnanHodzic/auto-cpufreq";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     disko = {
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     impermanence.url = "github:nix-community/impermanence";
-    home-manager = {
-      url = "github:nix-community/home-manager";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    niri = {
-      url = "github:sodiboo/niri-flake";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
-    zig = {
-      url = "github:mitchellh/zig-overlay";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
@@ -31,27 +15,86 @@
       specialArgs = inputs;
       modules = [
         inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
-        inputs.auto-cpufreq.nixosModules.default
         inputs.disko.nixosModules.default
         inputs.impermanence.nixosModules.default
         ./boot.nix
-        ./configuration.nix
-        inputs.home-manager.nixosModules.default
-        {
-          nixpkgs.overlays = [ inputs.zig.overlays.default ];
-          home-manager = {
-            useGlobalPkgs = true;
-            useUserPackages = true;
-            users.nathaniel = import ./home.nix;
-            extraSpecialArgs = {
-              inherit (inputs) niri;
-              pkgs = import inputs.nixpkgs {
-                system = "x86_64-linux";
-                overlays = [ inputs.niri.overlays.niri ];
+        (
+          { lib, pkgs, ... }:
+          {
+            # Configure nix.
+            system.stateVersion = "26.05";
+            nix = {
+              settings = {
+                experimental-features = [
+                  "nix-command"
+                  "flakes"
+                  "pipe-operators"
+                ];
+                use-xdg-base-directories = true;
               };
             };
-          };
-        }
+
+            # Configure networking.
+            networking.hostName = "fw";
+            networking.useDHCP = lib.mkDefault true;
+            networking.networkmanager.enable = true;
+            networking.networkmanager.wifi.backend = "iwd";
+            networking.wireless.iwd.enable = true;
+            boot.extraModprobeConfig = ''
+              options cfg80211 ieee80211_regdom=US
+            '';
+            boot.kernelPackages = pkgs.linuxPackages_latest;
+
+            # Define user.
+            users.mutableUsers = false;
+            users.users.nathaniel = {
+              isNormalUser = true;
+              hashedPassword = "$y$j9T$vUPrxkism.uCG9xvzQtgW/$.Mq9C2WCJi7uAgaOWVZ8vmgmVbtkL4MrraN8vRgGRa/";
+              extraGroups = [
+                # Allow sudo.
+                "wheel"
+                # Allow output configuration.
+                "video"
+                # Allow storage access.
+                "storage"
+                # Allow network configuration without sudo.
+                "networkmanager"
+              ];
+            };
+            security.sudo.wheelNeedsPassword = false;
+
+            # Add system-wide packages.
+            environment.systemPackages = with pkgs; [
+              git
+              curl
+              helix
+            ];
+
+            # Swap escape/capslock, in console too.
+            services.xserver.xkb.options = "caps:escape";
+            console.useXkbConfig = true;
+
+            # Allow fine-grained control of backlight level.
+            boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
+            services.udev.extraRules = ''SUBSYSTEM=="backlight", ENV{ID_BACKLIGHT_CLAMP}="0"'';
+
+            # `hardware-configuration.nix`
+            imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];
+            boot.initrd.availableKernelModules = [
+              "nvme"
+              "xhci_pci"
+              "thunderbolt"
+              # Enable external storage devices.
+              "usb_storage"
+              "sd_mod"
+            ];
+            boot.initrd.kernelModules = [ ];
+            boot.kernelModules = [ "kvm-amd" ];
+            boot.extraModulePackages = [ ];
+            nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
+            hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
+          }
+        )
       ];
     };
   };

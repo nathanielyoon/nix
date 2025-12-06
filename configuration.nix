@@ -36,6 +36,11 @@
   networking.hostName = "fw";
   networking.useDHCP = lib.mkDefault true;
   networking.networkmanager.enable = true;
+  networking.networkmanager.wifi.backend = "iwd";
+  networking.wireless.iwd.enable = true;
+  boot.extraModprobeConfig = ''
+    options cfg80211 ieee80211_regdom=US
+  '';
 
   # Set locale.
   i18n.defaultLocale = "en_US.UTF-8";
