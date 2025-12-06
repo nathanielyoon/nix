@@ -1,11 +1,7 @@
-{ pkgs, lib, ... }@inputs:
+{ lib, pkgs, ... }:
 {
-  environment.pathsToLink = [
-    "/share/applications"
-    "/share/xdg-desktop-portal"
-  ];
-
-  # Configure nix itself.
+  # Configure nix.
+  system.stateVersion = "25.11";
   nix = {
     settings = {
       experimental-features = [
@@ -13,24 +9,9 @@
         "flakes"
         "pipe-operators"
       ];
-      # Replace duplicate files with hard links to a single copy.
-      auto-optimise-store = true;
-      # Change location of Nix symlinks to reduce clutter in home directory.
       use-xdg-base-directories = true;
     };
-    # Clean up automatically.
-    gc = {
-      automatic = true;
-      dates = "weekly";
-      options = "--delete-older-than=14d";
-    };
-    optimise = {
-      automatic = true;
-      dates = "weekly";
-      persistent = true;
-    };
   };
-  system.stateVersion = "26.05";
 
   # Configure networking.
   networking.hostName = "fw";
@@ -41,35 +22,7 @@
   boot.extraModprobeConfig = ''
     options cfg80211 ieee80211_regdom=US
   '';
-
-  # Set locale.
-  i18n.defaultLocale = "en_US.UTF-8";
-  time.timeZone = "America/New_York";
-
-  # Add fonts.
-  fonts = {
-    enableDefaultPackages = true;
-    packages = with pkgs; [
-      nerd-fonts.zed-mono
-      noto-fonts
-      noto-fonts-monochrome-emoji
-    ];
-  };
-
-  # Configure boot.
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  # Takes a while to start up. Check if necessary.
-  # services.fwupd.enable = true;
-  services.logrotate.enable = true;
-  services.journald = {
-    storage = "volatile";
-    upload.enable = false;
-  };
-
-  # Manage power.
-  services.auto-cpufreq.enable = true;
-  services.power-profiles-daemon.enable = false;
-  hardware.fw-fanctrl.enable = true;
 
   # Define user.
   users.mutableUsers = false;
@@ -92,64 +45,13 @@
   # Add system-wide packages.
   environment.systemPackages = with pkgs; [
     git
-    gh
     curl
-    wget
-    lsd
     helix
-    zigpkgs.master
   ];
 
-  # Configure bash.
-  programs.bash = {
-    enable = true;
-    completion.enable = true;
-    shellAliases = {
-      "cd.." = "cd ..";
-      "..." = "cd ../..";
-      "...." = "cd ../../..";
-      "....." = "cd ../../../..";
-      "l" = "lsd --icon=never";
-      "la" = "lsd --almost-all";
-      "ll" = "lsd --long --almost-all";
-      "lt" = "lsd --tree";
-      "sc" = "systemctl";
-    };
-  };
-
-  # Enable dynamic linking.
-  programs.nix-ld.enable = true;
-
-  # Enable bluetooth.
-  hardware.bluetooth.enable = true;
-
-  # Configure keyboard input.
-  services.libinput.enable = true;
   # Swap escape/capslock, in console too.
   services.xserver.xkb.options = "caps:escape";
   console.useXkbConfig = true;
-
-  # Enable (unfree) fingerprint reader.
-  systemd.services.fprintd = {
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.type = "simple";
-  };
-  services.fprintd = {
-    enable = true;
-    tod = {
-      enable = true;
-      driver = pkgs.libfprint-2-tod1-goodix;
-    };
-  };
-  nixpkgs.config.allowUnfreePredicate =
-    pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
-
-  # Enable sound.
-  services.pipewire = {
-    enable = true;
-    pulse.enable = true;
-  };
-  security.rtkit.enable = true;
 
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
