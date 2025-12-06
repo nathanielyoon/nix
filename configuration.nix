@@ -1,4 +1,4 @@
-{ lib, pkgs, ... }:
+{ lib, pkgs, ... }@inputs:
 {
   # Configure nix.
   system.stateVersion = "25.11";

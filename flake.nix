@@ -27,8 +27,8 @@
         {
           home-manager = {
             useGlobalPkgs = true;
-            useUserPkgs = true;
-            users.nathaniel = import ./home.nix
+            useUserPackages = true;
+            users.nathaniel = import ./home.nix;
           };
         }
       ];

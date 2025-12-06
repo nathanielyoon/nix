@@ -3,12 +3,14 @@ let
   enable = path: value: { enable = true; } // lib.setAttrByPath path value;
 in
 {
+  # Configure home-manager.
   programs.home-manager = enable [ ] { };
   home = {
     stateVersion = "25.11";
     username = "nathaniel";
     homeDirectory = "/home/nathaniel";
   };
+
   # Configure basic personalization.
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   xdg.userDirs = enable [ ] {
