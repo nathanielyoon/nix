@@ -58,17 +58,21 @@
   security.sudo.wheelNeedsPassword = false;
 
   # Configure console.
+  services.xserver.xkb.options = "caps:escape";
+  console.useXkbConfig = true;
+  fonts = {
+    enableDefaultPackages = true;
+    packages = with pkgs; [
+      nerd-fonts.zed-mono
+      noto-fonts
+      noto-fonts-monochrome-emoji
+    ];
+  };
   programs.bash = {
     completion.enable = true;
     promptInit = ''
       PS1='\W \$ '
     '';
-  };
-
-  # Add Niri.
-  programs.niri.enable = true;
-  environment.variables = {
-    NIRI_CONFIG = "$HOME/nix/niri.kdl";
   };
 
   # Add system-wide packages.
@@ -84,10 +88,11 @@
     xdg-desktop-portal-gnome
     wezterm
   ];
-
-  # Swap escape/capslock, in console too.
-  services.xserver.xkb.options = "caps:escape";
-  console.useXkbConfig = true;
+  programs.niri.enable = true;
+  environment.variables = {
+    WEZTERM_CONFIG_FILE = "$HOME/nix/wezterm.lua";
+    NIRI_CONFIG = "$HOME/nix/niri.kdl";
+  };
 
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
