@@ -12,6 +12,14 @@
       use-xdg-base-directories = true;
     };
   };
+  programs.nh = {
+    enable = true;
+    clean = {
+      enable = true;
+      extraArgs = "--keep-since 7d --keep 10";
+    };
+    flake = "/home/nathaniel/nix";
+  };
 
   # Configure networking.
   networking.hostName = "fw";
