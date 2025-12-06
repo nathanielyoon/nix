@@ -58,6 +58,7 @@
     curl
     helix
     zigpkgs.master
+    zig-shell-completions
   ];
 
   # Swap escape/capslock, in console too.
