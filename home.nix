@@ -5,7 +5,6 @@ in
 {
   # Configure desktop and utilities.
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-  programs.librewolf = enable [ ] { };
   home.packages = with pkgs; [
     mako
     xdg-desktop-portal-gtk
@@ -249,6 +248,156 @@ in
       features = "no-hunk-header";
       no-hunk-header.hunk-header-style = "omit";
     };
+  };
+
+  # Configure browser.
+  programs.librewolf = enable [ ] {
+    settings = {
+      "webgl.disabled" = false;
+      "identity.fxaccounts.enabled" = true;
+      "privacy.clearOnShutdown.history" = false;
+      "privacy.clearOnShutdown.downloads" = true;
+      "privacy.resistFingerprinting" = false;
+      "privacy.fingerprintingProtection" = true;
+      "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC";
+    };
+    profiles.default = {
+      search = {
+        force = true;
+        engines = {
+          nixos-wiki = {
+            name = "NixOS Wiki";
+            urls = [ { template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; } ];
+            iconMapObj."16" = "https://wiki.nixos.org/favicon.ico";
+            definedAliases = [ "@nw" ];
+          };
+          league-of-legends-wiki = {
+            name = "League of Legends Wiki";
+            urls = [ { template = "https://wiki.leagueoflegends.com/en-us/?search={searchTerms}"; } ];
+            iconMapObj."16" = "https://wiki.leagueoflegends.com/favicon.ico";
+            definedAliases = [ "@lol" ];
+          };
+          scryfall = {
+            name = "Scryfall";
+            urls = [ { template = "https://scryfall.com/search?q={searchTerms}"; } ];
+            iconMapObj."16" = "https://scryfall.com/favicon.ico";
+            definedAliases = [ "@sf" ];
+          };
+          hn = {
+            name = "Hacker News";
+            urls = [ { template = "https://hn.algolia.com/?q={searchTerms}"; } ];
+            iconMapObj."16" = "https://news.ycombinator.com/favicon.ico";
+            definedAliases = [ "@hn" ];
+          };
+          google.metaData.hidden = true;
+          bing.metaData.hidden = true;
+          "policy-DuckDuckGo Lite".metaData.hidden = true;
+          "policy-SearXNG - searx.be".metaData.hidden = true;
+          "policy-MetaGer".metaData.hidden = true;
+          "policy-StartPage".metaData.hidden = true;
+          "policy-Mojeek".metaData.hidden = true;
+        };
+        default = "ddg";
+        privateDefault = "ddg";
+        order = [ "ddg" ];
+      };
+      userChrome = builtins.readFile ./userChrome.css;
+    };
+    policies = {
+      AutofillAddressEnabled = false;
+      AutofillCreditCardEnabled = false;
+      DefaultDownloadDirectory = "/home/nathaniel/all/downloads";
+      DisableFeedbackCommands = true;
+      DisableFirefoxStudies = true;
+      DisableMasterPasswordCreation = true;
+      DisablePocket = true;
+      DisableProfileImport = true;
+      DisableTelemetry = true;
+      DisplayBookmarksToolbar = "newtab";
+      DontCheckDefaultBrowser = true;
+      EnableTrackingProtection = {
+        Value = true;
+        Cryptomining = true;
+        Fingerprinting = true;
+        EmailTracking = true;
+      };
+      ExtensionUpdate = true;
+      FirefoxHome = {
+        Search = false;
+        TopSites = false;
+        SponsoredTopSites = false;
+        Highlights = false;
+        Pocket = false;
+        Stories = false;
+        SponsoredPocket = false;
+        SponsoredStories = false;
+        Snippets = false;
+      };
+      FirefoxSuggest = {
+        WebSuggestions = true;
+        SponsoredSuggestions = false;
+        ImproveSuggest = false;
+      };
+      HardwareAcceleration = true;
+      HttpAllowList = [
+        "http://localhost"
+        "http://127.0.0.1"
+        "http://0.0.0.0"
+        "http://example.com"
+      ];
+      HttpsOnlyMode = "enabled";
+      ManualAppUpdateOnly = true;
+      OfferToSaveLogins = false;
+      NetworkPrediction = true;
+      NoDefaultBookmarks = true;
+      PasswordManagerEnabled = false;
+      PostQuantumKeyAgreementEnabled = true;
+      Preferences = {
+        "browser.cache.disk.metadata_memory_limit" = 256 * 1024;
+        "browser.cache.disk.free_space_soft_limit" = 1024 * 1024;
+        "browser.cache.disk.free_space_hard_limit" = 1024 * 4096;
+        "browser.cache.disk.preload_chunk_count" = 16;
+        "browser.compactmode.show" = true;
+        "browser.history.collectWireframes" = true;
+        "browser.newtabpage.enabled" = false;
+        "browser.taskbarTabs.enabled" = false;
+        "cookiebanners.service.mode" = 2;
+        "layout.testing.overlay-scrollbars.always-visible" = true;
+        "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+        "widget.disable-swipe-tracker" = true;
+        "browser.ml.enable" = false;
+        "browser.ml.chat.enabled" = false;
+        "browser.ml.chat.hideFromLabs" = true;
+        "browser.ml.chat.hideLabsShortcuts" = true;
+        "browser.ml.chat.page" = false;
+        "browser.ml.chat.page.footerBadge" = false;
+        "browser.ml.chat.page.menuBadge" = false;
+        "browser.ml.chat.menu" = false;
+        "browser.ml.linkPreview.enabled" = false;
+        "browser.ml.pageAssist.enabled" = false;
+        "browser.tabs.groups.smart.enabled" = false;
+        "browser.tabs.groups.smart.userEnable" = false;
+        "extensions.ml.enabled" = false;
+      };
+      PrimaryPassword = false;
+      PrintingEnabled = true;
+      PromptForDownloadLocation = true;
+      SearchSuggestEnabled = true;
+      ShowHomeButton = false;
+      SkipTermsOfUse = true;
+      UserMessaging = {
+        WhatsNew = false;
+        ExtensionRecommendations = false;
+        FeatureRecommendations = false;
+        UrlbarInterventions = false;
+        SkipOnboarding = false;
+        MoreFromMozilla = false;
+      };
+    };
+  };
+  xdg.desktopEntrieslibrewolf = {
+    name = "LibreWolf";
+    exec = "${pkgs.librewolf}/bin/librewolf";
   };
 
   # Move XDG directories.
