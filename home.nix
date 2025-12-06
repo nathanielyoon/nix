@@ -111,6 +111,12 @@ in
     (writeShellScriptBin "gp" ''
       git push --quiet "$@"
     '')
+    (writeShellScriptBin "gacp" ''
+      if [[ $# -eq 0 ]]; then exit 1; fi
+      git add --all
+      git commit --message "$*"
+      git push --quiet
+    '')
     deno
     nodejs_latest
     bun
