@@ -94,12 +94,10 @@ in
     gcc
     glibc
     libcxx
-    uv
     python3
     sqlite
     rustc
     cargo
-    wrangler
     (writeShellScriptBin "dnr" ''
       if [[ $# -eq 0 ]]; then deno repl --allow-all --unstable-raw-imports
       else deno run --allow-all --unstable-raw-imports "$@"; fi
@@ -116,12 +114,12 @@ in
     (writeShellScriptBin "dnj" ''
       deno task --unstable-raw-imports --unstable-bundle --unstable-tsgo --quiet --cwd=. "$@"
     '')
-    vscode-langservers-extracted
     clang-tools
     marksman
     nil
     nixd
     bash-language-server
+    shfmt
     taplo
     superhtml
     typst
