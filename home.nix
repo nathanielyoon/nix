@@ -64,4 +64,8 @@ in
       no-hunk-header.hunk-header-style = "omit";
     };
   };
+
+  # Enable browsers.
+  programs.librewolf = enable [ ] { };
+  programs.chromium = enable ["commandLineArgs"] [ "--ozone-platform-hint=auto" ];
 }
