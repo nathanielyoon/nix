@@ -10,9 +10,15 @@
     zig-shell-completions
     wezterm
   ];
+  programs.neovim = {
+    enable = true;
+    defaultEditor = true;
+    viAlias = true;
+  };
   programs.niri.enable = true;
   environment.variables = {
     WEZTERM_CONFIG_FILE = "$HOME/nix/wezterm.lua";
+    MYVIMRC = "$HOME/nix/vim.lua";
     NIRI_CONFIG = "$HOME/nix/niri.kdl";
   };
 
