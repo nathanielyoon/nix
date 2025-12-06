@@ -26,11 +26,12 @@ in
 
   # Configure bash.
   programs.bash = enable [ ] {
+    historyFile = "$HOME/all/histfile";
+    historyControl = [ "ignoreboth" "erasedups" ];
+    historyFileSize = 536870912;
+    historySize = 1048576;
     sessionVariables = {
       LESSHISTFILE = "-";
-      HISTFILE = "$HOME/all/histfile";
-      HISTSIZE = 1048576;
-      HISTFILESIZE = 536870912;
     };
     shellOptions = [
       "autocd"
@@ -38,6 +39,7 @@ in
       "globstar"
       "histappend"
       "histverify"
+      "lithist"
       "nullglob"
     ];
   };
