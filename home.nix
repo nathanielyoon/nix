@@ -130,6 +130,7 @@ in
     rust-analyzer
     rustfmt
     zls
+    kdlfmt
   ];
   programs.bat = enable [ "config" "style" ] "numbers";
   programs.btop = enable [ "settings" ] {
