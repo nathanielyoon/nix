@@ -15,7 +15,8 @@ in
       runtimeInputs = [ sd ];
       text = ''
         NUMBERISH='^([[:digit:]]+(\.[[:digit:]]+)|\.[[:digit:]]+)?[+-]$'
-        if [[ "$1" =~ $NUMBERISH ]]; then wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1"
+        if [[ $# -eq 0 ]]; then wpctl get-volume @DEFAULT_AUDIO_SINK@ | sd '^Volume: (\d+\.\d+)(?:( )\[(M)UTED\])?$' '$1$2$3'
+        elif [[ "$1" =~ $NUMBERISH ]]; then wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1"
         else
             case "$1" in
             "m") wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
@@ -23,7 +24,6 @@ in
             "U") wpctl set-mute @DEFAULT_AUDIO_SINK@ "0" ;;
             "+") wpctl set-volume @DEFAULT_AUDIO_SINK@ "0.1+" ;;
             "-") wpctl set-volume @DEFAULT_AUDIO_SINK@ "0.1-" ;;
-            *) wpctl get-volume @DEFAULT_AUDIO_SINK@ | sd '^Volume: (\d+\.\d+)(?:( )\[(M)UTED\])?$' '$1$2$3' ;;
             esac
         fi
       '';
@@ -33,12 +33,12 @@ in
       FILE=/sys/class/backlight/amdgpu_bl1/brightness
       PREV=$(<$FILE)
       NUMERIC='^[0-9]{1,5}$'
-      if [[ "$1" =~ $NUMERIC ]]; then NEXT=$1
+      if [[ $# -eq 0 ]]; then echo $PREV
+      elif [[ "$1" =~ $NUMERIC ]]; then NEXT=$1
       else
         case "$1" in
         "+") NEXT=$((PREV + 1285)) ;;
         "-") NEXT=$((PREV - 1285)) ;;
-        *) echo $PREV ;;
         esac
       fi
       if [[ $NEXT =~ $NUMERIC ]]; then sudo tee $FILE <<<"$NEXT"; fi
