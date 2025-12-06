@@ -207,7 +207,7 @@ in
   programs.ripgrep = enable [ "arguments" ] [
     "--smart-case"
     "--hidden"
-    "--ignore-file=.git/"
+    "--glob=\"! .git/\""
   ];
   programs.rtorrent = enable [ ] { };
   programs.tealdeer = enable [ "settings" "updates" "auto_update" ] true;
