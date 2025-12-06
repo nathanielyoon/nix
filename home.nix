@@ -3,26 +3,177 @@ let
   enable = path: value: { enable = true; } // lib.setAttrByPath path value;
 in
 {
-  # Configure home-manager.
-  programs.home-manager = enable [ ] { };
-  home = {
-    stateVersion = "25.11";
-    username = "nathaniel";
-    homeDirectory = "/home/nathaniel";
-  };
-
-  # Configure basic personalization.
+  # Configure desktop and utilities.
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-  xdg.userDirs = enable [ ] {
-    desktop = "$HOME/all/Desktop";
-    documents = "$HOME/all/Desktop/documents";
-    download = "$HOME/all/downloads";
-    music = "$HOME/all/Desktop/music";
-    pictures = "$HOME/all/Desktop/pictures";
-    publicShare = "$HOME/all/Desktop/public-share";
-    templates = "$HOME/all/Desktop/templates";
-    videos = "$HOME/save/Desktop/videos";
+  programs.librewolf = enable [ ] { };
+  home.packages = with pkgs; [
+    mako
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
+    (writeShellApplication {
+      name = "vol";
+      runtimeInputs = [ sd ];
+      text = ''
+        NUMBERISH='^([[:digit:]]+(\.[[:digit:]]+)|\.[[:digit:]]+)?[+-]$'
+        if [[ "$1" =~ $NUMBERISH ]]; then wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1"
+        else
+            case "$1" in
+            "m") wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
+            "M") wpctl set-mute @DEFAULT_AUDIO_SINK@ "1" ;;
+            "U") wpctl set-mute @DEFAULT_AUDIO_SINK@ "0" ;;
+            "+") wpctl set-volume @DEFAULT_AUDIO_SINK@ "0.1+" ;;
+            "-") wpctl set-volume @DEFAULT_AUDIO_SINK@ "0.1-" ;;
+            *) wpctl get-volume @DEFAULT_AUDIO_SINK@ | sd '^Volume: (\d+\.\d+)(?:( )\[(M)UTED\])?$' '$1$2$3' ;;
+            esac
+        fi
+      '';
+      excludeShellChecks = [ "SC2016" ];
+    })
+    (writeShellScriptBin "bri" ''
+      FILE=/sys/class/backlight/amdgpu_bl1/brightness
+      PREV=$(<$FILE)
+      NUMERIC='^[0-9]{1,5}$'
+      if [[ "$1" =~ $NUMERIC ]]; then NEXT=$1
+      else
+        case "$1" in
+        "+") NEXT=$((PREV + 1285)) ;;
+        "-") NEXT=$((PREV - 1285)) ;;
+        *) echo $PREV ;;
+        esac
+      fi
+      if [[ $NEXT =~ $NUMERIC ]]; then sudo tee $FILE <<<"$NEXT"; fi
+    '')
+    (writeShellScriptBin "pwr" ''
+      cat /sys/class/power_supply/BAT1/capacity
+    '')
+    (writeShellScriptBin "now" ''
+      date "+%I:%M:%S"
+    '')
+    choose
+    sd
+    clac
+    libqalculate
+    ffmpeg
+    libreoffice-still
+    mupdf-headless
+    dust
+    zip
+    unzip
+    brotli
+    xan
+    pulsemixer
+    wf-recorder
+    wev
+    pandoc
+    xh
+    git-filter-repo
+    (writeShellScriptBin "gl" ''
+      git log --oneline "$@"
+    '')
+    (writeShellScriptBin "gs" ''
+      git status --short "$@"
+    '')
+    (writeShellScriptBin "gd" ''
+      git diff "$@"
+    '')
+    (writeShellScriptBin "ga" ''
+      if [[ $# -eq 0 ]]; then git add --all
+      else git add "$@"; fi
+    '')
+    (writeShellScriptBin "gc" ''
+      if [[ $# -eq 0 ]]; then git commit
+      else git commit --message "$*"; fi
+    '')
+    (writeShellScriptBin "gp" ''
+      git push --quiet "$@"
+    '')
+    deno
+    nodejs_latest
+    bun
+    esbuild
+    gcc
+    glibc
+    libcxx
+    uv
+    python3
+    sqlite
+    rustc
+    cargo
+    wrangler
+    (writeShellScriptBin "dnr" ''
+      if [[ $# -eq 0 ]]; then deno repl --allow-all --unstable-raw-imports
+      else deno run --allow-all --unstable-raw-imports "$@"; fi
+    '')
+    (writeShellScriptBin "dnl" ''
+      deno lint --permit-no-files --compact "$@"
+    '')
+    (writeShellScriptBin "dnb" ''
+      deno bench --unstable-raw-imports --unstable-bundle --unstable-tsgo --allow-all --no-check "$@"
+    '')
+    (writeShellScriptBin "dnt" ''
+      deno test --allow-all --unstable-raw-imports --unstable-bundle --unstable-tsgo --no-check --permit-no-files --doc --parallel "$@"
+    '')
+    (writeShellScriptBin "dnj" ''
+      deno task --unstable-raw-imports --unstable-bundle --unstable-tsgo --quiet --cwd=. "$@"
+    '')
+    vscode-langservers-extracted
+    clang-tools
+    marksman
+    nil
+    nixd
+    bash-language-server
+    taplo
+    superhtml
+    typst
+    tinymist
+    typstyle
+    ruff
+    ty
+    rust-analyzer
+    rustfmt
+    zls
+  ];
+  programs.bat = enable [ "config" "style" ] "numbers";
+  programs.btop = enable [ "settings" ] {
+    vim_keys = true;
+    rounded_corners = false;
+    update_ms = 1000;
+    temp_scale = "fahrenheit";
+    clock_format = "%X";
   };
+  programs.chromium = enable [ "commandLineArgs" ] [ "--ozone-platform-hint=auto" ];
+  programs.fd = enable [ ] { };
+  programs.fzf = enable [ ] {
+    enableBashIntegration = true;
+    defaultOptions = [ "--no-mouse" ];
+  };
+  programs.jq = enable [ ] { };
+  programs.lsd = enable [ ] {
+    enableBashIntegration = true;
+    settings = {
+      blocks = [
+        "date"
+        "permission"
+        "size"
+        "name"
+      ];
+      icons.separator = "  ";
+      sorting.dir-grouping = "first";
+    };
+  };
+  programs.mpv = enable [ ] { };
+  programs.nix-search-tv = enable [ "settings" ] {
+    indexes = [
+      "nixpkgs"
+      "home-manager"
+      "nixos"
+    ];
+  };
+  programs.ripgrep = enable [ "arguments" ] [ "--smart-case" ];
+  programs.rtorrent = enable [ ] { };
+  programs.tealdeer = enable [ "settings" "updates" "auto_update" ] true;
+  programs.yt-dlp = enable [ ] { };
+  programs.zathura = enable [ "options" "database" ] "sqlite";
 
   # Configure bash.
   programs.bash = enable [ ] {
@@ -65,7 +216,23 @@ in
     };
   };
 
-  # Enable browsers.
-  programs.librewolf = enable [ ] { };
-  programs.chromium = enable ["commandLineArgs"] [ "--ozone-platform-hint=auto" ];
+  # Move XDG directories.
+  xdg.userDirs = enable [ ] {
+    desktop = "$HOME/all/Desktop";
+    documents = "$HOME/all/Desktop/documents";
+    download = "$HOME/all/downloads";
+    music = "$HOME/all/Desktop/music";
+    pictures = "$HOME/all/Desktop/pictures";
+    publicShare = "$HOME/all/Desktop/public-share";
+    templates = "$HOME/all/Desktop/templates";
+    videos = "$HOME/save/Desktop/videos";
+  };
+
+  # Configure home-manager.
+  programs.home-manager = enable [ ] { };
+  home = {
+    stateVersion = "25.11";
+    username = "nathaniel";
+    homeDirectory = "/home/nathaniel";
+  };
 }
