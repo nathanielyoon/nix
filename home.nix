@@ -395,7 +395,7 @@ in
       };
     };
   };
-  xdg.desktopEntrieslibrewolf = {
+  xdg.desktopEntries.librewolf = {
     name = "LibreWolf";
     exec = "${pkgs.librewolf}/bin/librewolf";
   };
