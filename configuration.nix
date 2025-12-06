@@ -64,7 +64,9 @@
 
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
-  services.udev.extraRules = ''SUBSYSTEM=="backlight", ENV{ID_BACKLIGHT_CLAMP}="0"'';
+  services.udev.extraRules = ''
+    SUBSYSTEM=="backlight", ENV{ID_BACKLIGHT_CLAMP}="0"
+  '';
 
   # `hardware-configuration.nix`
   imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];

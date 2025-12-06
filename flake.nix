@@ -12,6 +12,7 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    zig.url = "github:mitchellh/zig-overlay";
   };
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
@@ -22,6 +23,7 @@
         inputs.disko.nixosModules.default
         inputs.impermanence.nixosModules.default
         ./boot.nix
+        { nixpkgs.overlays = [ inputs.zig.overlays.default ]; }
         ./configuration.nix
         inputs.home-manager.nixosModules.default
         {
