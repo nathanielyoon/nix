@@ -39,9 +39,15 @@
   networking.networkmanager = {
     enable = true;
     wifi.backend = "iwd";
-    settings.wifi.powersave = 2;
+    settings = {
+      wifi.powersave = 2;
+      device."wifi.iwd.autoconnect" = true;
+    };
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
+  time.timeZone = "America/New_York";
+  i18n.defaultLocale = "en_US.UTF-8";
+  networking.firewall.enable = true;
 
   # Configure console.
   services.xserver.xkb.options = "caps:escape";
@@ -98,6 +104,32 @@
     ];
   };
   security.sudo.wheelNeedsPassword = false;
+  services.pipewire = {
+    enable = true;
+    pulse.enable = true;
+  };
+  security.rtkit.enable = true;
+
+  # Enable some system services.
+  programs.nix-ld.enable = true;
+  hardware.bluetooth.enable = true;
+  services.libinput.enable = true;
+  services.udisks2.enable = true;
+
+  # Enable (unfree) fingerprint reader.
+  systemd.services.fprintd = {
+    wantedBy = [ "multi-user.target" ];
+    serviceConfig.type = "simple";
+  };
+  services.fprintd = {
+    enable = true;
+    tod = {
+      enable = true;
+      driver = pkgs.libfprint-2-tod1-goodix;
+    };
+  };
+  nixpkgs.config.allowUnfreePredicate =
+    pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
 
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
