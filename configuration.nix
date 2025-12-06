@@ -52,10 +52,12 @@
   security.sudo.wheelNeedsPassword = false;
 
   # Add system-wide packages.
+  nixpkgs.overlays = [ inputs.zig.overlays.default ];
   environment.systemPackages = with pkgs; [
     git
     curl
     helix
+    zigpkgs.master
   ];
 
   # Swap escape/capslock, in console too.

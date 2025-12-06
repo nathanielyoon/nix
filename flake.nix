@@ -23,7 +23,6 @@
         inputs.disko.nixosModules.default
         inputs.impermanence.nixosModules.default
         ./boot.nix
-        { nixpkgs.overlays = [ inputs.zig.overlays.default ]; }
         ./configuration.nix
         inputs.home-manager.nixosModules.default
         {
