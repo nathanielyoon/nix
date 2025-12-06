@@ -57,6 +57,12 @@
   };
   security.sudo.wheelNeedsPassword = false;
 
+  # Add Niri.
+  programs.niri.enable = true;
+  environment.variables = {
+    NIRI_CONFIG = "$HOME/nix/niri.kdl";
+  };
+
   # Add system-wide packages.
   nixpkgs.overlays = [ inputs.zig.overlays.default ];
   environment.systemPackages = with pkgs; [
@@ -65,6 +71,10 @@
     helix
     zigpkgs.master
     zig-shell-completions
+    mako
+    xdg-desktop-portal-gtk
+    xdg-desktop-portal-gnome
+    wezterm
   ];
 
   # Swap escape/capslock, in console too.

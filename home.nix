@@ -37,7 +37,6 @@ in
       "extglob"
       "globstar"
       "histappend"
-      "histreedit"
       "histverify"
       "nullglob"
     ];
