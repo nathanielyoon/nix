@@ -49,6 +49,33 @@ in
     (writeShellScriptBin "now" ''
       date "+%I:%M:%S"
     '')
+    trashy
+    (writeShellScriptBin "tp" ''
+      for file; do trash put "$file"; done
+    '')
+    (writeShellScriptBin "pt" ''
+      RANGES=$(trash --color=always list | tac | fzf --multi --ansi | cut -d' ' -f2)
+      [[ -n $RANGES ]] && trash restore --ranges "$RANGES"
+    '')
+    wl-clipboard
+    cliphist
+    (writeShellScriptBin "unclip" ''cliphist list | fzf | xargs -r cliphist decode | wl-copy'')
+    (writeShellScriptBin "pdf" ''
+      for file; do zathura "$file" 2>/dev/null & disown; done
+    '')
+    (writeShellScriptBin "ascii" ''
+      printf "$(printf '\\x%x ' {32..126})\n" | fold --width=32
+    '')
+    (writeShellScriptBin "ns" ''
+      nix-search-tv print | fzf \
+          --preview='nix-search-tv preview {}' \
+          --bind='ctrl-a:execute(nix-search-tv homepage {} | xargs xdg-open)' \
+          --bind='ctrl-s:execute(nix-search-tv source {} | xargs xdg-open)' \
+          --layout=reverse \
+          --preview-window="wrap$(if [[ "$(tput cols)" -lt 90 ]]; then printf ",up"; fi)" \
+          --header "open: homep[a]ge [s]ource" \
+          --header-first
+    '')
     choose
     sd
     clac
@@ -131,6 +158,14 @@ in
     rustfmt
     zls
     kdlfmt
+    (writeShellScriptBin "minify" ''
+      JS=$(esbuild --minify --bundle --format=esm "$@")
+      printf "%s\n" "$JS"
+      printf "minify\t%u\ngzip\t%u\nbrotli\t%u\n" \
+          "$(wc --bytes <<<"$JS")" \
+          "$(gzip --best <<<"$JS" | wc --bytes)" \
+          "$(brotli --best <<<"$JS" | wc --bytes)"
+    '')
   ];
   programs.bat = enable [ "config" "style" ] "numbers";
   programs.btop = enable [ "settings" ] {
