@@ -48,6 +48,9 @@ binds {
     Mod+A {
         spawn "wezterm"
     }
+    Mod+Shift+A {
+        spawn "wezterm" "start" "--class" "org.wezfurlong.wezterm.floating"
+    }
     Mod+S {
         spawn "librewolf"
     }
@@ -200,13 +203,17 @@ window-rule {
     open-floating true
 }
 window-rule {
-    match app-id="org.wezfurlong.wezterm"
+    match app-id="^org\\.wezfurlong\\.wezterm$" is-floating=false
     default-column-width {
         fixed 893
     }
 }
 window-rule {
-    match app-id="librewolf"
+    match app-id="^org\\.wezfurlong\\.wezterm\\.floating"
+    open-floating true
+}
+window-rule {
+    match app-id="librewolf" is-floating=false
     default-column-width {
         fixed 1034
     }
