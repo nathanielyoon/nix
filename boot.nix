@@ -98,6 +98,7 @@
       "nix"
       "tmp"
       "all"
+      "job"
       ".ssh"
       ".librewolf"
     ];
