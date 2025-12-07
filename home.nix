@@ -30,7 +30,7 @@ in
       stylua
     ];
     themes.base = {
-      extends = "base16_transparent";
+      inherits = "base16_transparent";
       "ui.cursor.primary".modifiers = [ "reversed" ];
     };
     settings.theme = "base";
