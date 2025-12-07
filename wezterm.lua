@@ -1,5 +1,7 @@
 local wezterm = require("wezterm")
 local config = wezterm.config_builder()
+local act = wezterm.action
+config.key_tables = {}
 
 -- Minimize window padding.
 config.window_padding = {
@@ -22,5 +24,17 @@ config.font_size = 15
 
 -- Show cursor when typing.
 config.hide_mouse_cursor_when_typing = false
+
+-- Configure scrollback.
+config.scrollback_lines = 65536
+config.enable_scroll_bar = false
+
+-- Configure search mode.
+config.key_tables.search_mode = {
+	{ key = "n", mods = "CTRL", action = act.CopyMode("NextMatch") },
+	{ key = "p", mods = "CTRL", action = act.CopyMode("PriorMatch") },
+	{ key = "u", mods = "CTRL", action = act.CopyMode("ClearPattern") },
+	{ key = "Escape", mods = "NONE", action = act.CopyMode("Close") },
+}
 
 return config
