@@ -114,7 +114,7 @@
   programs.nix-ld.enable = true;
   hardware.bluetooth.enable = true;
   services.libinput.enable = true;
-  services.udisks2.enable = true;
+  services.ringboard.wayland.enable = true;
 
   # Enable (unfree) fingerprint reader.
   systemd.services.fprintd = {

@@ -32,16 +32,6 @@ output "eDP-1" {
 }
 layout {
     gaps 0
-    preset-column-widths {
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-    }
-    preset-window-heights {
-        proportion 0.33333
-        proportion 0.5
-        proportion 0.66667
-    }
     default-column-width {
         proportion 0.5
     }
@@ -51,14 +41,9 @@ layout {
     focus-ring {
         off
     }
-    tab-indicator {
-        place-within-column
-        gap 0
-    }
     empty-workspace-above-first
 }
 spawn-at-startup "mako"
-spawn-sh-at-startup "wl-paste --watch cliphist store"
 hotkey-overlay {
     skip-at-startup
 }
@@ -71,10 +56,10 @@ window-rule {
     open-floating true
 }
 binds {
-    Ctrl+Alt+Delete {
+    Mod+Return {
         quit
     }
-    Mod+Escape allow-inhibiting=false {
+    Ctrl+Alt+Delete allow-inhibiting=false {
         toggle-keyboard-shortcuts-inhibit
     }
     Mod+Shift+P {
@@ -105,20 +90,11 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true {
         spawn "bri" "-"
     }
-    Mod+O repeat=false {
+    Mod+Tab repeat=false {
         toggle-overview
     }
-    Mod+Space repeat=false {
+    Mod+Escape repeat=false {
         close-window
-    }
-    Mod+Shift+Space {
-        switch-preset-column-width
-    }
-    Mod+Ctrl+Space {
-        switch-preset-window-height
-    }
-    Mod+Ctrl+Shift+Space {
-        toggle-column-tabbed-display
     }
     Mod+H {
         focus-column-or-monitor-left
@@ -144,50 +120,8 @@ binds {
     Mod+Ctrl+L {
         move-column-right-or-to-monitor-right
     }
-    Mod+Shift+H {
-        set-column-width "-47"
-    }
-    Mod+Shift+J {
-        set-window-height "+47"
-    }
-    Mod+Shift+K {
-        set-window-height "-47"
-    }
-    Mod+Shift+L {
-        set-column-width "+47"
-    }
-    Mod+Ctrl+Shift+J {
-        move-workspace-down
-    }
-    Mod+Ctrl+Shift+K {
-        move-workspace-up
-    }
-    Mod+Ctrl+Shift+H {
-        consume-or-expel-window-left
-    }
-    Mod+Ctrl+Shift+L {
-        consume-or-expel-window-right
-    }
-    Mod+Semicolon {
-        switch-focus-between-floating-and-tiling
-    }
-    Mod+Shift+Semicolon {
-        toggle-window-floating
-    }
-    Mod+Ctrl+Semicolon {
-        maximize-column
-    }
-    Mod+Ctrl+Shift+Semicolon {
-        fullscreen-window
-    }
     Print {
         screenshot
-    }
-    Ctrl+Print {
-        screenshot-screen
-    }
-    Alt+Print {
-        screenshot-window
     }
 }
 

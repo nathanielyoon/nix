@@ -57,8 +57,6 @@ in
       [[ -n $RANGES ]] && trash restore --ranges "$RANGES"
     '')
     wl-clipboard
-    cliphist
-    (writeShellScriptBin "unclip" ''cliphist list | fzf | xargs -r cliphist decode | wl-copy'')
     (writeShellScriptBin "pdf" ''
       for file; do zathura "$file" 2>/dev/null & disown; done
     '')
