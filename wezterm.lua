@@ -3,13 +3,15 @@ local config = wezterm.config_builder()
 local act = wezterm.action
 config.key_tables = {}
 
--- Minimize window padding.
+-- Configure window.
 config.window_padding = {
 	left = 1,
 	right = 1,
 	top = 1,
 	bottom = 1,
 }
+config.window_background_opacity = 0.75
+config.text_background_opacity = 1.0
 
 -- Configure tab bar.
 config.hide_tab_bar_if_only_one_tab = true
@@ -35,6 +37,13 @@ config.key_tables.search_mode = {
 	{ key = "p", mods = "CTRL", action = act.CopyMode("PriorMatch") },
 	{ key = "u", mods = "CTRL", action = act.CopyMode("ClearPattern") },
 	{ key = "Escape", mods = "NONE", action = act.CopyMode("Close") },
+}
+
+-- Configure other key assignments.
+config.disable_default_key_bindings = true
+config.keys = {
+	{ key = "c", mods = "CTRL|SHIFT", action = act.CopyTo("Clipboard") },
+	{ key = "v", mods = "CTRL|SHIFT", action = act.PasteFrom("Clipboard") },
 }
 
 return config
