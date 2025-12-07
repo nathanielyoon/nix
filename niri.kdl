@@ -140,6 +140,8 @@ layout {
         fixed 1128
         // offset base
         fixed 1363
+        // full
+        fixed 2256
     }
     preset-window-heights {
         // 25%
