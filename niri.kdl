@@ -31,9 +31,7 @@ toggle-overview
 maximize-column
 fullscreen-window
 -
-OPTIONS
--
-tab-indicator place-within-column
+switch-preset-column-width
 */
 binds {
     Mod+Return {
@@ -92,8 +90,20 @@ binds {
 layout {
     gaps 0
     empty-workspace-above-first
+    preset-column-widths {
+        // 33%
+        fixed 752
+        // term
+        fixed 893
+        // browser
+        fixed 1034
+        // 50%
+        fixed 1128
+        // 67%
+        fixed 1504
+    }
     default-column-width {
-        proportion 0.5
+        fixed 752
     }
     border {
         off
@@ -101,7 +111,15 @@ layout {
     focus-ring {
         off
     }
+    tab-indicator {
+        place-within-column
+        gap 0
+        position "bottom"
+    }
 }
+spawn-at-startup "mako"
+prefer-no-csd
+screenshot-path "~/all/Desktop/pictures/screenshots/%Y-%m-%dT%H-%M-%S.png"
 environment {
     TERM "wezterm"
     BROWSER "librewolf"
@@ -114,22 +132,31 @@ environment {
     GTK_USE_PORTAL "1"
     ELECTRON_OZONE_PLATFORM_HINT "auto"
 }
-prefer-no-csd
 gestures {
     hot-corners {
         off
     }
 }
-spawn-at-startup "mako"
 hotkey-overlay {
     skip-at-startup
 }
-screenshot-path "~/all/Desktop/pictures/screenshots/%Y-%m-%dT%H-%M-%S.png"
 animations {
     slowdown 0.5
 }
 window-rule {
     match app-id="(firefox|librewolf)$" title="^Picture-in-Picture$"
     open-floating true
+}
+window-rule {
+    match app-id="org.wezfurlong.wezterm"
+    default-column-width {
+        fixed 893
+    }
+}
+window-rule {
+    match app-id="librewolf"
+    default-column-width {
+        fixed 1034
+    }
 }
 
