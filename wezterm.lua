@@ -20,4 +20,7 @@ config.font = wezterm.font({
 })
 config.font_size = 15
 
+-- Show cursor when typing.
+config.hide_mouse_cursor_when_typing = false
+
 return config

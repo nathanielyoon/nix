@@ -16,38 +16,15 @@ output "eDP-1" {
     position x=0 y=0
     focus-at-startup
 }
-/*BINDS
--
-focus-workspace-down
-focus-workspace-up
--
-toggle-window-floating
-switch-focus-between-floating-and-tiling
--
-toggle-column-tabbed-display
--
-toggle-overview
--
-maximize-column
-fullscreen-window
--
-switch-preset-column-width
-*/
 binds {
-    Mod+Return {
-        power-off-monitors
-    }
     Mod+Shift+Return {
         quit
     }
-    Ctrl+Alt+Delete allow-inhibiting=false {
-        toggle-keyboard-shortcuts-inhibit
+    Mod+Return {
+        power-off-monitors
     }
-    Mod+A {
-        spawn "wezterm"
-    }
-    Mod+S {
-        spawn "librewolf"
+    Mod+Escape {
+        toggle-overview
     }
     XF86AudioMute allow-when-locked=true {
         spawn "vol" "m"
@@ -68,7 +45,25 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true {
         spawn "bri" "-"
     }
-    Mod+Escape repeat=false {
+    Mod+A {
+        spawn "wezterm"
+    }
+    Mod+S {
+        spawn "librewolf"
+    }
+    Print {
+        screenshot
+    }
+    Shift+Print {
+        screenshot-window
+    }
+    Ctrl+Print {
+        screenshot-screen
+    }
+    Mod+Ctrl+Escape allow-inhibiting=false {
+        toggle-keyboard-shortcuts-inhibit
+    }
+    Mod+Q repeat=false {
         close-window
     }
     Mod+H {
@@ -83,8 +78,53 @@ binds {
     Mod+L {
         focus-column-or-monitor-right
     }
-    Print {
-        screenshot
+    Mod+Ctrl+H {
+        move-column-left-or-to-monitor-left
+    }
+    Mod+Ctrl+J {
+        move-window-down-or-to-workspace-down
+    }
+    Mod+Ctrl+K {
+        move-window-up-or-to-workspace-up
+    }
+    Mod+Ctrl+L {
+        move-column-right-or-to-monitor-right
+    }
+    Mod+Shift+H {
+        set-column-width "-47"
+    }
+    Mod+Shift+J {
+        set-window-height "+47"
+    }
+    Mod+Shift+K {
+        set-window-height "-47"
+    }
+    Mod+Shift+L {
+        set-column-width "+47"
+    }
+    Mod+Ctrl+Shift+H {
+        consume-or-expel-window-left
+    }
+    Mod+Ctrl+Shift+J {
+        move-workspace-down
+    }
+    Mod+Ctrl+Shift+K {
+        move-workspace-up
+    }
+    Mod+Ctrl+Shift+L {
+        consume-or-expel-window-right
+    }
+    Mod+Semicolon {
+        switch-focus-between-floating-and-tiling
+    }
+    Mod+Ctrl+Semicolon {
+        toggle-window-floating
+    }
+    Mod+Shift+Semicolon {
+        switch-preset-column-width
+    }
+    Mod+Ctrl+Shift+Semicolon {
+        switch-preset-window-height
     }
 }
 layout {
@@ -100,6 +140,18 @@ layout {
         // 50%
         fixed 1128
         // 67%
+        fixed 1504
+        // 100%
+        fixed 2256
+    }
+    preset-window-heights {
+        // 25%
+        fixed 376
+        // 50%
+        fixed 752
+        // 75%
+        fixed 1128
+        // 100%
         fixed 1504
     }
     default-column-width {
@@ -157,6 +209,24 @@ window-rule {
     match app-id="librewolf"
     default-column-width {
         fixed 1034
+    }
+}
+recent-windows {
+    debounce-ms 0
+    open-delay-ms 0
+    binds {
+        Mod+Tab {
+            next-window
+        }
+        Mod+Shift+Tab {
+            previous-window
+        }
+        Mod+grave {
+            next-window filter="app-id"
+        }
+        Mod+Shift+grave {
+            previous-window filter="app-id"
+        }
     }
 }
 
