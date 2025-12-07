@@ -27,6 +27,7 @@ in
       zls
       kdlfmt
       lua-language-server
+      stylua
     ];
     settings.theme = "base16_transparent";
     settings.editor = {
