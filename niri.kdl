@@ -63,11 +63,14 @@ binds {
     Ctrl+Print {
         screenshot-screen
     }
-    Mod+Ctrl+Escape allow-inhibiting=false {
+    Mod+Delete allow-inhibiting=false {
         toggle-keyboard-shortcuts-inhibit
     }
     Mod+Q repeat=false {
         close-window
+    }
+    Mod+W {
+        toggle-column-tabbed-display
     }
     Mod+H {
         focus-column-or-monitor-left
@@ -163,9 +166,11 @@ layout {
         off
     }
     tab-indicator {
+        position "bottom"
         place-within-column
         gap 0
-        position "bottom"
+        width 2
+        length total-proportion=1.0
     }
 }
 spawn-at-startup "mako"
