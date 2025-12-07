@@ -134,18 +134,12 @@ layout {
     gaps 0
     empty-workspace-above-first
     preset-column-widths {
-        // 33%
-        fixed 752
-        // term
+        // base
         fixed 893
-        // browser
-        fixed 1034
-        // 50%
+        // half
         fixed 1128
-        // 67%
-        fixed 1504
-        // 100%
-        fixed 2256
+        // offset base
+        fixed 1363
     }
     preset-window-heights {
         // 25%
@@ -200,10 +194,6 @@ animations {
     slowdown 0.5
 }
 window-rule {
-    match app-id="(firefox|librewolf)$" title="^Picture-in-Picture$"
-    open-floating true
-}
-window-rule {
     match app-id="^org\\.wezfurlong\\.wezterm$" is-floating=false
     default-column-width {
         fixed 893
@@ -216,7 +206,7 @@ window-rule {
 window-rule {
     match app-id="librewolf" is-floating=false
     default-column-width {
-        fixed 1034
+        fixed 893
     }
 }
 recent-windows {

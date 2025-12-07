@@ -226,7 +226,7 @@
 }
 
 /* RESPONSIVE */
-@media (min-width: 1000px) {
+@media (min-width: 893px) {
   #navigator-toolbox {
     display: flex;
     flex-wrap: wrap;
