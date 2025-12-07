@@ -29,7 +29,11 @@ in
       lua-language-server
       stylua
     ];
-    settings.theme = "base16_transparent";
+    themes.base = {
+      extends = "base16_transparent";
+      "ui.cursor.primary".modifiers = [ "reversed" ];
+    };
+    settings.theme = "base";
     settings.editor = {
       scrolloff = 0;
       scroll-lines = 1;
@@ -587,7 +591,7 @@ in
       "privacy.clearOnShutdown.downloads" = true;
       "privacy.resistFingerprinting" = false;
       "privacy.fingerprintingProtection" = true;
-      "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC";
+      "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC ";
     };
     profiles.default = {
       search = {
