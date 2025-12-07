@@ -332,6 +332,10 @@ in
         }
         {
           name = "lua";
+          formatter = {
+            command = "stylua";
+            args = [ "-" ];
+          };
           auto-format = true;
         }
       ];
