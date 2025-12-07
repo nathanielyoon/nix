@@ -400,6 +400,9 @@ in
       [[ -n $RANGES ]] && trash restore --ranges "$RANGES"
     '')
     wl-clipboard
+    (writeShellScriptBin "unclip" ''
+      cliphist list | fzf --no-sort | xargs -r cliphist decode | wl-copy
+    '')
     (writeShellScriptBin "pdf" ''
       for file; do zathura "$file" 2>/dev/null & disown; done
     '')
@@ -502,6 +505,7 @@ in
     temp_scale = "fahrenheit";
     clock_format = "%X";
   };
+  services.cliphist = enable [ "extraOptions" ] [ "-max-items" "16777216" ];
   programs.chromium = enable [ "commandLineArgs" ] [ "--ozone-platform-hint=auto" ];
   programs.fd = enable [ ] {
     hidden = true;

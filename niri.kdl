@@ -173,6 +173,7 @@ layout {
     }
 }
 spawn-at-startup "mako"
+spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 prefer-no-csd
 screenshot-path "~/all/Desktop/pictures/screenshots/%Y-%m-%dT%H-%M-%S.png"
 environment {
