@@ -1,70 +1,49 @@
-environment {
-    TERM "wezterm"
-    BROWSER "librewolf"
-    OFFICE "libreoffice"
-    QT_QPA_PLATFORM "wayland"
-    GDK_BACKEND "wayland"
-    SDL_VIDEODRIVER "wayland"
-    MOZ_ENABLE_WAYLAND "1"
-    NIXOS_OZONE_WL "1"
-    GTK_USE_PORTAL "1"
-}
-prefer-no-csd
-gestures {
-    hot-corners {
-        off
-    }
-}
 input {
-    disable-power-key-handling
     keyboard {
         repeat-delay 192
-        repeat-rate 48
+        repeat-rate 64
     }
     touchpad {
+        scroll-method "two-finger"
         tap
         dwt
+        drag true
     }
+    disable-power-key-handling
 }
 output "eDP-1" {
     scale 1
-    /-transform "90"
     position x=0 y=0
+    focus-at-startup
 }
-layout {
-    gaps 0
-    default-column-width {
-        proportion 0.5
-    }
-    border {
-        off
-    }
-    focus-ring {
-        off
-    }
-    empty-workspace-above-first
-}
-spawn-at-startup "mako"
-hotkey-overlay {
-    skip-at-startup
-}
-screenshot-path "~/all/Desktop/pictures/screenshots/%Y-%m-%d %H-%M-%S.png"
-animations {
-    slowdown 0.5
-}
-window-rule {
-    match app-id="(firefox|librewolf)$" title="^Picture-in-Picture$"
-    open-floating true
-}
+/*BINDS
+-
+focus-workspace-down
+focus-workspace-up
+-
+toggle-window-floating
+switch-focus-between-floating-and-tiling
+-
+toggle-column-tabbed-display
+-
+toggle-overview
+-
+maximize-column
+fullscreen-window
+-
+OPTIONS
+-
+tab-indicator place-within-column
+*/
 binds {
     Mod+Return {
+        power-off-monitors
+    }
+    Mod+Shift+Return {
         quit
     }
     Ctrl+Alt+Delete allow-inhibiting=false {
         toggle-keyboard-shortcuts-inhibit
-    }
-    Mod+Shift+P {
-        power-off-monitors
     }
     Mod+A {
         spawn "wezterm"
@@ -91,9 +70,6 @@ binds {
     XF86MonBrightnessDown allow-when-locked=true {
         spawn "bri" "-"
     }
-    Mod+Tab repeat=false {
-        toggle-overview
-    }
     Mod+Escape repeat=false {
         close-window
     }
@@ -109,19 +85,51 @@ binds {
     Mod+L {
         focus-column-or-monitor-right
     }
-    Mod+Ctrl+H {
-        move-column-left-or-to-monitor-left
-    }
-    Mod+Ctrl+J {
-        move-window-down-or-to-workspace-down
-    }
-    Mod+Ctrl+K {
-        move-window-up-or-to-workspace-up
-    }
-    Mod+Ctrl+L {
-        move-column-right-or-to-monitor-right
-    }
     Print {
         screenshot
     }
 }
+layout {
+    gaps 0
+    empty-workspace-above-first
+    default-column-width {
+        proportion 0.5
+    }
+    border {
+        off
+    }
+    focus-ring {
+        off
+    }
+}
+environment {
+    TERM "wezterm"
+    BROWSER "librewolf"
+    OFFICE "libreoffice"
+    QT_QPA_PLATFORM "wayland"
+    GDK_BACKEND "wayland"
+    SDL_VIDEODRIVER "wayland"
+    MOZ_ENABLE_WAYLAND "1"
+    NIXOS_OZONE_WL "1"
+    GTK_USE_PORTAL "1"
+    ELECTRON_OZONE_PLATFORM_HINT "auto"
+}
+prefer-no-csd
+gestures {
+    hot-corners {
+        off
+    }
+}
+spawn-at-startup "mako"
+hotkey-overlay {
+    skip-at-startup
+}
+screenshot-path "~/all/Desktop/pictures/screenshots/%Y-%m-%dT%H-%M-%S.png"
+animations {
+    slowdown 0.5
+}
+window-rule {
+    match app-id="(firefox|librewolf)$" title="^Picture-in-Picture$"
+    open-floating true
+}
+
