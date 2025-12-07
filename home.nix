@@ -36,7 +36,7 @@ in
     settings.theme = "base";
     settings.editor = {
       scrolloff = 0;
-      scroll-lines = 1;
+      scroll-lines = 2;
       line-number = "relative";
       idle-timeout = 0;
       auto-completion = true;
@@ -347,6 +347,7 @@ in
 
   # Configure desktop and utilities.
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
+  services.wpaperd = enable [ "settings" "default" "path" ] "$HOME/all/pictures/leo.jpeg";
   home.packages = with pkgs; [
     mako
     xdg-desktop-portal-gtk
