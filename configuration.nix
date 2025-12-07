@@ -40,7 +40,7 @@
     enable = true;
     wifi.backend = "iwd";
     settings = {
-      wifi.powersave = 2;
+      connection."wifi.powersave" = 2;
       device."wifi.iwd.autoconnect" = true;
     };
   };
