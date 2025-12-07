@@ -26,6 +26,7 @@ in
       rustfmt
       zls
       kdlfmt
+      lua-language-server
     ];
     settings.theme = "base16_transparent";
     settings.editor = {
@@ -326,6 +327,10 @@ in
         }
         {
           name = "kdl";
+          auto-format = true;
+        }
+        {
+          name = "lua";
           auto-format = true;
         }
       ];
