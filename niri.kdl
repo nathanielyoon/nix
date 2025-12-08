@@ -42,8 +42,14 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true {
         spawn "bri" "+"
     }
+    Shift+XF86MonBrightnessUp allow-when-locked=true {
+        spawn "bri" "65535"
+    }
     XF86MonBrightnessDown allow-when-locked=true {
         spawn "bri" "-"
+    }
+    Shift+XF86MonBrightnessDown allow-when-locked=true {
+        spawn "bri" "0"
     }
     Mod+A {
         spawn "wezterm"
