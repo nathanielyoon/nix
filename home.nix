@@ -786,7 +786,7 @@ in
     };
   };
   home.file.".librewolf/default/chrome/userChrome.css".source =
-    inputs.config.lib.file.mkOutOfStoreSymlink ./userChrome.css;
+    inputs.config.lib.file.mkOutOfStoreSymlink "/home/nathaniel/nix/userChrome.css";
   xdg.desktopEntries.librewolf = {
     name = "LibreWolf";
     exec = "${pkgs.librewolf}/bin/librewolf";
