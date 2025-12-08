@@ -1,4 +1,4 @@
-{ pkgs, lib, ... }:
+{ pkgs, lib, ... }@inputs:
 let
   enable = path: value: { enable = true; } // lib.setAttrByPath path value;
 in
@@ -183,6 +183,7 @@ in
           }
         ];
       };
+      zls.config.zls.enable_argument_placeholders = false;
     };
     languages.language =
       let
@@ -638,7 +639,6 @@ in
         privateDefault = "ddg";
         order = [ "ddg" ];
       };
-      userChrome = builtins.readFile ./userChrome.css;
     };
     policies = {
       AutofillAddressEnabled = false;
@@ -785,6 +785,8 @@ in
       };
     };
   };
+  home.file.".librewolf/default/chrome/userChrome.css".source =
+    inputs.config.lib.file.mkOutOfStoreSymlink ./userChrome.css;
   xdg.desktopEntries.librewolf = {
     name = "LibreWolf";
     exec = "${pkgs.librewolf}/bin/librewolf";
