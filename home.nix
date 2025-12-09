@@ -8,7 +8,6 @@ in
     defaultEditor = true;
     extraPackages = with pkgs; [
       vscode-langservers-extracted
-      clang-tools
       marksman
       nil
       nixd
@@ -16,13 +15,11 @@ in
       shfmt
       taplo
       superhtml
-      typst
       tinymist
       typstyle
       ruff
       ty
       nixfmt-rfc-style
-      rust-analyzer
       rustfmt
       zls
       kdlfmt
@@ -499,6 +496,9 @@ in
           "$(gzip --best <<<"$JS" | wc --bytes)" \
           "$(brotli --best <<<"$JS" | wc --bytes)"
     '')
+    typst
+    clang-tools
+    rust-analyzer
   ];
   programs.bat = enable [ "config" "style" ] "numbers";
   programs.btop = enable [ "settings" ] {
