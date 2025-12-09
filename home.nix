@@ -424,6 +424,8 @@ in
     libqalculate
     ffmpeg
     libreoffice-still
+    hunspell
+    hunspellDicts.en_US-large
     mupdf-headless
     dust
     zip
