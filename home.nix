@@ -568,6 +568,14 @@ in
       "nullglob"
     ];
   };
+  programs.readline = enable [ "variables" ] {
+    blink-matching-paren = true;
+    colored-stats = true;
+    mark-symlinked-directories = true;
+    match-hidden-files = false;
+    page-completions = false;
+    show-all-if-ambiguous = true;
+  };
 
   # Configure git.
   programs.git = enable [ "settings" ] {
