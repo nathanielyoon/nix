@@ -568,13 +568,21 @@ in
       "nullglob"
     ];
   };
-  programs.readline = enable [ "variables" ] {
-    blink-matching-paren = true;
-    colored-stats = true;
-    mark-symlinked-directories = true;
-    match-hidden-files = false;
-    page-completions = false;
-    show-all-if-ambiguous = true;
+  programs.readline = enable [ ] {
+    bindings = {
+      "\\C-p" = "history-search-backward";
+      "\\C-n" = "history-search-forward";
+    };
+    variables = {
+      blink-matching-paren = true;
+      colored-stats = true;
+      completion-prefix-display-length = 4;
+      mark-symlinked-directories = true;
+      match-hidden-files = false;
+      page-completions = false;
+      show-all-if-ambiguous = true;
+      show-all-if-unmodified = true;
+    };
   };
 
   # Configure git.
