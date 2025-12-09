@@ -597,7 +597,7 @@ in
       "privacy.clearOnShutdown.downloads" = true;
       "privacy.resistFingerprinting" = false;
       "privacy.fingerprintingProtection" = true;
-      "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC ";
+      "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC";
     };
     profiles.default = {
       search = {

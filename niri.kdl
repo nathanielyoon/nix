@@ -13,8 +13,6 @@ input {
 }
 output "eDP-1" {
     scale 1
-    position x=0 y=0
-    focus-at-startup
 }
 binds {
     Mod+Shift+Return {
