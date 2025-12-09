@@ -567,6 +567,15 @@ in
       "lithist"
       "nullglob"
     ];
+    # Limit pdf command to file extensions compatible with `mupdf` as per
+    # <https://wiki.archlinux.org/title/Zathura>.
+    initExtra = ''
+      _pdf() {
+          _init_completion || return
+          _filedir '@(pdf|epub|xps)'
+      }
+      complete -F _pdf pdf
+    '';
   };
   programs.readline = enable [ ] {
     bindings = {
