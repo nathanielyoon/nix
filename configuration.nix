@@ -73,9 +73,7 @@
     };
     interactiveShellInit = lib.mkAfter ''
       _completion_loader lsd
-      for command in l la ll lla lt lta; do
-          complete -o bashdefault -o default -o nosort -F _lsd "$command"
-      done
+      complete -o bashdefault -o default -o nosort -F _lsd l la ll lla lt lta
       _completion_loader systemctl
       complete -F _systemctl sc
     '';
