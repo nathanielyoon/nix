@@ -590,13 +590,18 @@ in
     user = {
       name = "Nathaniel Yoon";
       email = "nathanielyoon.expire025@slmails.com";
+      useConfigOnly = true;
     };
-    init.defaultBranch = "main";
-    push.autoSetupRemote = true;
     column.ui = "auto";
     commit.verbose = true;
     diff.algorithm = "histogram";
+    fetch.parallel = 0;
+    fetch.prune = true;
     help.autocorrect = "prompt";
+    init.defaultBranch = "main";
+    log.follow = true;
+    push.autoSetupRemote = true;
+    status.showStash = true;
   };
   programs.delta = enable [ ] {
     enableGitIntegration = true;
