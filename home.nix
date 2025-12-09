@@ -576,7 +576,6 @@ in
     variables = {
       blink-matching-paren = true;
       colored-stats = true;
-      completion-prefix-display-length = 4;
       mark-symlinked-directories = true;
       match-hidden-files = false;
       page-completions = false;
