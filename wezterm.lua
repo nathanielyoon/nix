@@ -68,6 +68,7 @@ config.keys = {
 	{ key = "s", mods = "CTRL|SHIFT", action = act.QuickSelect },
 	{ key = "d", mods = "CTRL|SHIFT", action = act.ActivateCopyMode },
 	{ key = "f", mods = "CTRL|SHIFT", action = act.Search("CurrentSelectionOrEmptyString") },
+	{ key = "Escape", mods = "CTRL|SHIFT", action = act.ShowDebugOverlay },
 	{ key = "-", mods = "CTRL", action = act.DecreaseFontSize },
 	{ key = "=", mods = "CTRL", action = act.IncreaseFontSize },
 	{ key = "0", mods = "CTRL", action = act.ResetFontSize },
@@ -95,7 +96,6 @@ config.keys = {
 	{ key = "j", mods = "ALT|SHIFT", action = act.AdjustPaneSize({ "Down", 1 }) },
 	{ key = "k", mods = "ALT|SHIFT", action = act.AdjustPaneSize({ "Up", 1 }) },
 	{ key = "l", mods = "ALT|SHIFT", action = act.AdjustPaneSize({ "Right", 1 }) },
-	{ key = "Escape", mods = "ALT", action = act.ShowDebugOverlay },
 }
 
 -- Configure search mode.
