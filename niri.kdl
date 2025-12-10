@@ -1,7 +1,7 @@
 input {
     keyboard {
-        repeat-delay 192
-        repeat-rate 64
+        repeat-delay 224
+        repeat-rate 80
     }
     touchpad {
         scroll-method "two-finger"
