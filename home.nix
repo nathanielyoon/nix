@@ -435,7 +435,6 @@ in
     pandoc
     xh
     git-filter-repo
-    gh
     (writeShellScriptBin "gl" ''
       git log --oneline "$@"
     '')
@@ -618,6 +617,10 @@ in
       features = "no-hunk-header";
       no-hunk-header.hunk-header-style = "omit";
     };
+  };
+  programs.gh = enable [ ] {
+    gitCredentialHelper.enable = true;
+    settings.git_protocol = "ssh";
   };
 
   # Configure browser.

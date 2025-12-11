@@ -94,14 +94,17 @@
       "/etc/NetworkManager/system-connections"
     ];
     files = [ "/etc/machine-id" ];
-    users.nathaniel.directories = [
-      "nix"
-      "tmp"
-      "all"
-      "job"
-      ".ssh"
-      ".librewolf"
-    ];
+    users.nathaniel = {
+      directories = [
+        "nix"
+        "tmp"
+        "all"
+        "job"
+        ".ssh"
+        ".librewolf"
+      ];
+      files = [ ".config/gh/hosts.yml" ];
+    };
   };
 
   # Configure boot.
