@@ -122,19 +122,16 @@
   services.udisks2.enable = true;
 
   # Enable (unfree) fingerprint reader.
-  systemd.services.fprintd = {
-    wantedBy = [ "multi-user.target" ];
-    serviceConfig.type = "simple";
-  };
-  services.fprintd = {
-    enable = true;
-    tod = {
-      enable = true;
-      driver = pkgs.libfprint-2-tod1-goodix;
-    };
-  };
-  nixpkgs.config.allowUnfreePredicate =
-    pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
+  services.fprintd.enable = true;
+  # services.fprintd = {
+  #   enable = true;
+  #   tod = {
+  #     enable = true;
+  #     driver = pkgs.libfprint-2-tod1-goodix;
+  #   };
+  # };
+  # nixpkgs.config.allowUnfreePredicate =
+  #   pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
 
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
