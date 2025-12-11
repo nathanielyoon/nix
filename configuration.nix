@@ -110,6 +110,7 @@
   security.sudo.wheelNeedsPassword = false;
 
   # Enable some system services.
+  services.fprintd.enable = true;
   services.pipewire = {
     enable = true;
     pulse.enable = true;
@@ -120,18 +121,6 @@
   services.libinput.enable = true;
   hardware.fw-fanctrl.enable = true;
   services.udisks2.enable = true;
-
-  # Enable (unfree) fingerprint reader.
-  services.fprintd.enable = true;
-  # services.fprintd = {
-  #   enable = true;
-  #   tod = {
-  #     enable = true;
-  #     driver = pkgs.libfprint-2-tod1-goodix;
-  #   };
-  # };
-  # nixpkgs.config.allowUnfreePredicate =
-  #   pkg: builtins.elem (lib.getName pkg) [ "libfprint-2-tod1-goodix" ];
 
   # Allow fine-grained control of backlight level.
   boot.kernelParams = [ "amdgpu.dcdebugmask=0x40000" ];
