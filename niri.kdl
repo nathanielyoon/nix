@@ -15,16 +15,16 @@ output "eDP-1" {
     scale 1
 }
 binds {
-    Mod+Shift+Return {
+    Mod+Shift+Return repeat=false {
         quit
     }
-    Mod+Return {
+    Mod+Return repeat=false {
         power-off-monitors
     }
     Mod+Escape {
         toggle-overview
     }
-    XF86AudioMute allow-when-locked=true {
+    XF86AudioMute repeat=false allow-when-locked=true {
         spawn "vol" "m"
     }
     XF86AudioLowerVolume allow-when-locked=true {
@@ -40,40 +40,40 @@ binds {
     XF86MonBrightnessUp allow-when-locked=true {
         spawn "bri" "+"
     }
-    Shift+XF86MonBrightnessUp allow-when-locked=true {
+    Shift+XF86MonBrightnessUp repeat=false allow-when-locked=true {
         spawn "bri" "65535"
     }
     XF86MonBrightnessDown allow-when-locked=true {
         spawn "bri" "-"
     }
-    Shift+XF86MonBrightnessDown allow-when-locked=true {
+    Shift+XF86MonBrightnessDown repeat=false allow-when-locked=true {
         spawn "bri" "0"
     }
-    Mod+A {
+    Mod+A repeat=false {
         spawn "wezterm"
     }
-    Mod+Shift+A {
+    Mod+Shift+A repeat=false {
         spawn "wezterm" "start" "--class" "org.wezfurlong.wezterm.floating"
     }
-    Mod+S {
+    Mod+S repeat=false {
         spawn "librewolf"
     }
-    Print {
+    Print repeat=false {
         screenshot
     }
-    Shift+Print {
+    Shift+Print repeat=false {
         screenshot-window
     }
-    Ctrl+Print {
+    Ctrl+Print repeat=false {
         screenshot-screen
     }
-    Mod+Delete allow-inhibiting=false {
+    Mod+Delete repeat=false allow-inhibiting=false {
         toggle-keyboard-shortcuts-inhibit
     }
     Mod+Q repeat=false {
         close-window
     }
-    Mod+W {
+    Mod+W repeat=false {
         toggle-column-tabbed-display
     }
     Mod+H {
@@ -127,7 +127,7 @@ binds {
     Mod+Semicolon {
         switch-focus-between-floating-and-tiling
     }
-    Mod+Ctrl+Semicolon {
+    Mod+Ctrl+Semicolon repeat=false {
         toggle-window-floating
     }
     Mod+Shift+Semicolon {
