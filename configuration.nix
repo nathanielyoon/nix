@@ -41,8 +41,8 @@
     };
   };
   boot.kernelPackages = pkgs.linuxPackages_latest;
-  time.timeZone = "America/New_York";
   i18n.defaultLocale = "en_US.UTF-8";
+  time.timeZone = "America/New_York";
   networking.firewall.enable = true;
 
   # Configure console.
@@ -57,9 +57,13 @@
     ];
   };
   programs.bash = {
+    enable = true;
     completion.enable = true;
     promptInit = ''
       PS1='\W \$ '
+
+      if [[ -n "$PROMPT_COMMAND" ]]; then PROMPT_COMMAND+="; history -a"
+      else PROMPT_COMMAND="history -a"; fi
     '';
     shellAliases = {
       l = "lsd --icon=never";
@@ -75,7 +79,7 @@
     };
     interactiveShellInit = lib.mkAfter ''
       _completion_loader lsd
-      complete -o bashdefault -o default -o nosort -F _lsd l la ll lla lt lta
+      complete -o bashdefault -o default -o nosort -F _lsd l la ll lla lt lta llt llta
       _completion_loader systemctl
       complete -F _systemctl sc
       . ${
@@ -104,16 +108,18 @@
     ];
   };
   security.sudo.wheelNeedsPassword = false;
+
+  # Enable some system services.
   services.pipewire = {
     enable = true;
     pulse.enable = true;
   };
   security.rtkit.enable = true;
-
-  # Enable some system services.
   programs.nix-ld.enable = true;
   hardware.bluetooth.enable = true;
   services.libinput.enable = true;
+  hardware.fw-fanctrl.enable = true;
+  services.udisks2.enable = true;
 
   # Enable (unfree) fingerprint reader.
   systemd.services.fprintd = {
@@ -146,8 +152,48 @@
     };
   };
 
+  # Enable some basic hardening.
+  services.logrotate.enable = true;
+  services.journald = {
+    storage = "volatile";
+    upload.enable = false;
+  };
+  boot.kernel.sysctl = {
+    "fs.protected_fifos" = 2;
+    "fs.protected_regular" = 2;
+    "fs.suid_dumpable" = false;
+    "kernel.exec-shield" = 1;
+    "kernel.kptr_restrict" = 2;
+    "kernel.randomize_va_space" = 2;
+    "kernel.sysrq" = 0;
+    "net.core.default_qdisc" = "cake";
+    "net.ipv4.conf.all.accept_redirects" = 0;
+    "net.ipv4.conf.all.accept_source_route" = 0;
+    "net.ipv4.conf.all.forwarding" = 0;
+    "net.ipv4.conf.all.rp_filter" = 1;
+    "net.ipv4.conf.all.secure_redirects" = 0;
+    "net.ipv4.conf.all.send_redirects" = 0;
+    "net.ipv4.conf.default.accept_redirects" = 0;
+    "net.ipv4.conf.default.rp_filter" = 1;
+    "net.ipv4.conf.default.secure_redirects" = 0;
+    "net.ipv4.conf.default.send_redirects" = 0;
+    "net.ipv4.icmp_ignore_bogus_error_responses" = 1;
+    "net.ipv4.tcp_congestion_control" = "bbr";
+    "net.ipv4.tcp_fastopen" = 3;
+    "net.ipv4.tcp_rfc1337" = 1;
+    "net.ipv4.tcp_syncookies" = 1;
+    "net.ipv6.conf.all.accept_redirects" = 0;
+    "net.ipv6.conf.all.accept_source_route" = 0;
+    "net.ipv6.conf.all.forwarding" = 0;
+    "net.ipv6.conf.default.accept_redirects" = 0;
+    "vm.mmap_rnd_bits" = 32;
+  };
+  users.groups.netdev = { };
+  services.usbguard.enable = false;
+  services.dbus.implementation = "broker";
+
   # Configure nix.
-  system.stateVersion = "25.11";
+  system.stateVersion = "26.05";
   nix = {
     settings = {
       experimental-features = [
@@ -157,14 +203,23 @@
       ];
       use-xdg-base-directories = true;
       warn-dirty = false;
+      download-buffer-size = 536870912;
+      auto-optimise-store = true;
+    };
+    # Clean up automatically.
+    gc = {
+      automatic = true;
+      dates = "daily";
+      options = "--delete-older-than=14d";
+    };
+    optimise = {
+      automatic = true;
+      dates = "daily";
+      persistent = true;
     };
   };
   programs.nh = {
     enable = true;
-    clean = {
-      enable = true;
-      extraArgs = "--keep-since 7d --keep 10";
-    };
     flake = "/home/nathaniel/nix";
   };
 

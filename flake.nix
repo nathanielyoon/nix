@@ -7,6 +7,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    auto-cpufreq = {
+      url = "github:AdnanHodzic/auto-cpufreq";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     impermanence.url = "github:nix-community/impermanence";
     home-manager = {
       url = "github:nix-community/home-manager";
@@ -21,6 +25,7 @@
       modules = [
         inputs.nixos-hardware.nixosModules.framework-amd-ai-300-series
         inputs.disko.nixosModules.default
+        inputs.auto-cpufreq.nixosModules.default
         inputs.impermanence.nixosModules.default
         ./boot.nix
         ./configuration.nix
