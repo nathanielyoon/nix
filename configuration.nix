@@ -78,6 +78,12 @@
       complete -o bashdefault -o default -o nosort -F _lsd l la ll lla lt lta
       _completion_loader systemctl
       complete -F _systemctl sc
+      . ${
+        builtins.fetchurl {
+          url = "https://raw.githubusercontent.com/wezterm/wezterm/refs/heads/main/assets/shell-integration/wezterm.sh";
+          sha256 = "1b5rxq9lzqw5gf3islamgqwsilyiw9svhq51249lxgq72drq608r";
+        }
+      }
     '';
   };
 

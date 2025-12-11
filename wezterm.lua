@@ -156,4 +156,13 @@ config.key_tables.copy_mode = {
 -- Configure quick select mode.
 config.quick_select_remove_styling = true
 
+-- Select entire output.
+config.mouse_bindings = {
+	{
+		event = { Down = { streak = 4, button = "Left" } },
+		mods = "NONE",
+		action = act.SelectTextAtMouseCursor("SemanticZone"),
+	},
+}
+
 return config
