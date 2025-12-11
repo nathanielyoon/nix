@@ -15,6 +15,8 @@
     zigpkgs.master
     zig-shell-completions
     wezterm
+    libxcb
+    xorg.libxcb
   ];
   programs.niri.enable = true;
   environment.variables = {
