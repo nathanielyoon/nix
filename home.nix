@@ -435,6 +435,7 @@ in
     pandoc
     xh
     git-filter-repo
+    gh
     (writeShellScriptBin "gl" ''
       git log --oneline "$@"
     '')
@@ -602,7 +603,7 @@ in
     };
     column.ui = "auto";
     commit.verbose = true;
-    diff.algorithm = "histogram";
+    diff.algorithm = "minimal";
     fetch.parallel = 0;
     fetch.prune = true;
     help.autocorrect = "prompt";
