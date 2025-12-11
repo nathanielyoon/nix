@@ -206,21 +206,15 @@
       download-buffer-size = 536870912;
       auto-optimise-store = true;
     };
-    # Clean up automatically.
-    gc = {
-      automatic = true;
-      dates = "daily";
-      options = "--delete-older-than=14d";
-    };
-    optimise = {
-      automatic = true;
-      dates = "daily";
-      persistent = true;
-    };
   };
   programs.nh = {
     enable = true;
     flake = "/home/nathaniel/nix";
+    clean = {
+      enable = true;
+      dates = "daily";
+      extraArgs = "--keep 8 --optimise";
+    };
   };
 
   # `hardware-configuration.nix`
