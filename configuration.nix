@@ -15,8 +15,8 @@
     zigpkgs.master
     zig-shell-completions
     wezterm
-    libxcb
-    xorg.libxcb
+    pkgs.man-pages
+    pkgs.man-pages-posix
   ];
   programs.niri.enable = true;
   environment.variables = {
@@ -129,6 +129,16 @@
   services.udev.extraRules = ''
     SUBSYSTEM=="backlight", ENV{ID_BACKLIGHT_CLAMP}="0"
   '';
+
+  # Enable documentation.
+  documentation = {
+    dev.enable = true;
+    man = {
+      man-db.enable = false;
+      mandoc.enable = true;
+      generateCaches = true;
+    };
+  };
 
   # Configure nix.
   system.stateVersion = "25.11";
