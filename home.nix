@@ -193,6 +193,18 @@ in
       "nixos"
     ];
   };
+  home.file.".config/qalculate/qalc.cfg".text = ''
+    [General]
+    save_config=0
+    save_mode_on_exit=0
+    exp_display=2
+    save_definitions_on_exit=0
+    spacious=1
+
+    [Mode]
+    caret_as_xor=1
+    calculate_as_you_type=1
+  '';
   programs.ripgrep = enable [ "arguments" ] [ "--smart-case" ];
   programs.rtorrent = enable [ ] { };
   programs.tealdeer = enable [ "settings" "updates" "auto_update" ] true;
