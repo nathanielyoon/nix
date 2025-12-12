@@ -91,9 +91,8 @@
           ];
           "~" = "switch_to_lowercase";
           "`" = "switch_case";
-          "x" = "extend_line_up";
-          "X" = "extend_line_down";
-          "'" = "repeat_last_motion";
+          "x" = "extend_line_below";
+          "X" = "extend_line_above";
         };
       in
       {
@@ -109,6 +108,11 @@
             "ensure_selections_forward"
             "goto_line_end"
           ];
+          "'" = [
+            "select_mode"
+            "repeat_last_motion"
+            "insert_mode"
+          ];
         };
         select = normal // {
           "H" = [
@@ -120,6 +124,7 @@
             "ensure_selections_forward"
             "goto_line_end"
           ];
+          "'" = "repeat_last_motion";
         };
         insert = insert;
       };
