@@ -35,45 +35,44 @@ in
       scrolloff = 0;
       scroll-lines = 2;
       line-number = "relative";
-      idle-timeout = 0;
-      auto-completion = true;
-      completion-timeout = 0;
-      completion-trigger-len = 1;
-      completion-replace = true;
-      color-modes = true;
-      trim-final-newlines = true;
-      end-of-line-diagnostics = "warning";
       gutters = [
         "line-numbers"
         "diff"
       ];
+      completion-timeout = 5;
+      completion-trigger-len = 1;
+      completion-replace = true;
+      color-modes = true;
+      trim-final-newlines = true;
+      popup-border = "popup";
+      end-of-line-diagnostics = "hint";
+      statusline = {
+        left = [
+          "total-line-numbers"
+          "mode"
+          "file-name"
+          "read-only-indicator"
+          "file-modification-indicator"
+        ];
+        right = [
+          "diagnostics"
+          "register"
+          "selections"
+          "primary-selection-length"
+          "position"
+        ];
+      };
+      lsp = {
+        auto-signature-help = false;
+        display-inlay-hints = false;
+      };
+      cursor-shape = {
+        normal = "block";
+        insert = "bar";
+        select = "underline";
+      };
       soft-wrap.enable = true;
       inline-diagnostics.cursor-line = "warning";
-    };
-    settings.editor.cursor-shape = {
-      normal = "block";
-      insert = "bar";
-      select = "underline";
-    };
-    settings.editor.statusline = {
-      left = [
-        "total-line-numbers"
-        "file-name"
-        "read-only-indicator"
-        "file-modification-indicator"
-      ];
-      center = [ "mode" ];
-      right = [
-        "diagnostics"
-        "register"
-        "selections"
-        "primary-selection-length"
-        "position"
-      ];
-    };
-    settings.editor.lsp = {
-      auto-signature-help = false;
-      display-inlay-hints = false;
     };
     settings.keys =
       let
@@ -338,6 +337,11 @@ in
             command = "stylua";
             args = [ "-" ];
           };
+          auto-format = true;
+        }
+        {
+          name = "zig";
+          rulers = [ 100 ];
           auto-format = true;
         }
       ];
