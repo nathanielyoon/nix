@@ -53,13 +53,12 @@
   };
   swapDevices = [ ];
 
-  # Configure impermanence.
+  # Wipe after boot.
   boot.initrd.postResumeCommands = {
     _type = "order";
     priority = 1500;
     content = ''
       mkdir /btrfs_tmp
-
       mount /dev/disk/by-label/nixos /btrfs_tmp
       if [[ -e /btrfs_tmp/root ]]; then
           mkdir -p /btrfs_tmp/old_roots
@@ -81,6 +80,8 @@
       umount /btrfs_tmp
     '';
   };
+
+  # Persist specific directories and files.
   environment.persistence."/persist" = {
     hideMounts = true;
     directories = [
@@ -96,12 +97,13 @@
     files = [ "/etc/machine-id" ];
     users.nathaniel = {
       directories = [
-        "nix"
-        "tmp"
+        ".librewolf"
+        ".ssh"
         "all"
         "job"
-        ".ssh"
-        ".librewolf"
+        "nix"
+        "sys"
+        "tmp"
       ];
       files = [ ".config/gh/hosts.yml" ];
     };
