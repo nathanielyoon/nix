@@ -354,7 +354,6 @@
       }
       {
         name = "zig";
-        rulers = [ 100 ];
         auto-format = true;
         language-servers = [
           {
