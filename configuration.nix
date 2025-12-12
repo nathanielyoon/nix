@@ -16,6 +16,7 @@
     wezterm
     pkgs.man-pages
     pkgs.man-pages-posix
+    gtrash
   ];
   programs.niri.enable = true;
   environment.variables = {

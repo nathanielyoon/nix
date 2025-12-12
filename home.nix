@@ -53,14 +53,6 @@ in
     (writeShellScriptBin "now" ''
       date "+%I:%M:%S"
     '')
-    trashy
-    (writeShellScriptBin "tp" ''
-      for file; do trash put "$file"; done
-    '')
-    (writeShellScriptBin "pt" ''
-      RANGES=$(trash --color=always list | tac | fzf --multi --ansi | cut -d' ' -f2)
-      [[ -n $RANGES ]] && trash restore --ranges "$RANGES"
-    '')
     wl-clipboard
     (writeShellScriptBin "unclip" ''
       cliphist list | fzf --no-sort | xargs -r cliphist decode | wl-copy
