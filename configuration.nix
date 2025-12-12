@@ -22,6 +22,8 @@
   environment.variables = {
     WEZTERM_CONFIG_FILE = "$HOME/nix/term.lua";
     NIRI_CONFIG = "$HOME/nix/wm.kdl";
+    GTRASH_HOME_TRASH_DIR = "$HOME/sys/trash";
+    GTRASH_ONLY_HOME_TRASH = "true";
   };
 
   # Configure networking.
@@ -76,6 +78,7 @@
       llta = "lsd --tree --long --almost-all";
       sc = "systemctl";
       "cd.." = "cd ..";
+      tp = "gtrash put";
     };
     interactiveShellInit = lib.mkAfter ''
       _completion_loader lsd
