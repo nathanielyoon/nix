@@ -111,7 +111,6 @@
           "'" = [
             "select_mode"
             "repeat_last_motion"
-            "insert_mode"
           ];
         };
         select = normal // {
