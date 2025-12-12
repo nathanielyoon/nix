@@ -64,10 +64,7 @@
           "position"
         ];
       };
-      lsp = {
-        auto-signature-help = false;
-        display-inlay-hints = false;
-      };
+      lsp.auto-signature-help = false;
       cursor-shape = {
         normal = "block";
         insert = "bar";
@@ -356,6 +353,12 @@
         name = "zig";
         rulers = [ 100 ];
         auto-format = true;
+        language-servers = [
+          {
+            name = "zls";
+            except-features = [ "diagnostics" ];
+          }
+        ];
       }
     ];
 }
