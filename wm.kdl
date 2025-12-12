@@ -221,7 +221,7 @@ window-rule {
     }
 }
 recent-windows {
-    debounce-ms 0
+    debounce-ms 1000
     open-delay-ms 0
     binds {
         Mod+Tab {
