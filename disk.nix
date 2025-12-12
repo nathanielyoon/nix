@@ -106,16 +106,4 @@
       files = [ ".config/gh/hosts.yml" ];
     };
   };
-
-  # Configure boot.
-  boot = {
-    loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
-    };
-    tmp = {
-      cleanOnBoot = true;
-      useTmpfs = true;
-    };
-  };
 }

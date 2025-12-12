@@ -22,8 +22,8 @@
   ];
   programs.niri.enable = true;
   environment.variables = {
-    WEZTERM_CONFIG_FILE = "$HOME/nix/wezterm.lua";
-    NIRI_CONFIG = "$HOME/nix/niri.kdl";
+    WEZTERM_CONFIG_FILE = "$HOME/nix/term.lua";
+    NIRI_CONFIG = "$HOME/nix/wm.kdl";
   };
 
   # Configure networking.
@@ -207,17 +207,27 @@
 
   # `hardware-configuration.nix`
   imports = [ "${inputs.modulesPath}/installer/scan/not-detected.nix" ];
-  boot.initrd.availableKernelModules = [
-    "nvme"
-    "xhci_pci"
-    "thunderbolt"
-    # Enable external storage devices.
-    "usb_storage"
-    "sd_mod"
-  ];
-  boot.initrd.kernelModules = [ ];
-  boot.kernelModules = [ "kvm-amd" ];
-  boot.extraModulePackages = [ ];
+  boot = {
+    loader = {
+      systemd-boot.enable = true;
+      efi.canTouchEfiVariables = true;
+    };
+    tmp = {
+      cleanOnBoot = true;
+      useTmpfs = true;
+    };
+    initrd.availableKernelModules = [
+      "nvme"
+      "xhci_pci"
+      "thunderbolt"
+      # Enable external storage devices.
+      "usb_storage"
+      "sd_mod"
+    ];
+    initrd.kernelModules = [ ];
+    kernelModules = [ "kvm-amd" ];
+    extraModulePackages = [ ];
+  };
   nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
   hardware.cpu.amd.updateMicrocode = lib.mkDefault inputs.config.hardware.enableRedistributableFirmware;
 }

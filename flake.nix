@@ -27,7 +27,7 @@
         inputs.disko.nixosModules.default
         inputs.auto-cpufreq.nixosModules.default
         inputs.impermanence.nixosModules.default
-        ./boot.nix
+        ./disk.nix
         ./configuration.nix
         inputs.home-manager.nixosModules.default
         {
