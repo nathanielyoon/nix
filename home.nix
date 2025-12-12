@@ -49,7 +49,6 @@ in
       statusline = {
         left = [
           "total-line-numbers"
-          "mode"
           "file-name"
           "read-only-indicator"
           "file-modification-indicator"
@@ -180,7 +179,6 @@ in
         ];
       };
       zls.config.zls.enable_argument_placeholders = false;
-      clangd.config.clangd.Completion.ArgumentLists = "Delimiters";
     };
     languages.language =
       let
@@ -346,6 +344,17 @@ in
           auto-format = true;
         }
       ];
+  };
+  home.file.clangd = {
+    text = ''
+      Completion:
+        ArgumentLists: Delimiters
+      Hover:
+        MacroContentLimit: 0
+      Documentation:
+        CommentFormat: Markdown
+    '';
+    target = ".config/clangd/config.yaml";
   };
 
   # Configure desktop and utilities.
