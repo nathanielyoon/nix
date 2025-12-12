@@ -278,7 +278,7 @@ in
 
   # Configure desktop.
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-  services.wpaperd = enable [ "settings" "default" "path" ] "$HOME/all/pictures/leo.jpeg";
+  services.wpaperd = enable [ "settings" "default" "path" ] "/home/nathaniel/all/pictures/leo.jpeg";
   xdg.userDirs = enable [ ] {
     desktop = "$HOME/all/Desktop";
     documents = "$HOME/all/Desktop/documents";
