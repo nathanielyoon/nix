@@ -17,6 +17,7 @@
     pkgs.man-pages
     pkgs.man-pages-posix
     gtrash
+    just
   ];
   programs.niri.enable = true;
   environment.variables = {
@@ -24,6 +25,7 @@
     NIRI_CONFIG = "$HOME/nix/wm.kdl";
     GTRASH_HOME_TRASH_DIR = "$HOME/sys/trash";
     GTRASH_ONLY_HOME_TRASH = "true";
+    JUST_JUSTFILE = "$HOME/sys/justfile";
   };
 
   # Configure networking.
