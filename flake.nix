@@ -21,6 +21,10 @@
       url = "github:helix-editor/helix/master";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    wezterm = {
+      url = "github:wezterm/wezterm?dir=nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
   outputs = inputs: {
     nixosConfigurations.fw = inputs.nixpkgs.lib.nixosSystem {
@@ -34,6 +38,16 @@
         ./disk.nix
         ./configuration.nix
         inputs.home-manager.nixosModules.default
+        {
+          nixpkgs.overlays = [
+            (final: prev: {
+              zigpkgs = inputs.zig.packages.${prev.stdenv.hostPlatform.system};
+              wezterm = inputs.wezterm.packages.${prev.stdenv.hostPlatform.system}.default;
+            })
+            inputs.helix.overlays.default
+          ];
+
+        }
         {
           home-manager = {
             useGlobalPkgs = true;

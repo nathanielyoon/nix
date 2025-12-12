@@ -1,10 +1,6 @@
 { lib, pkgs, ... }@inputs:
 {
   # Add system-wide packages.
-  nixpkgs.overlays = [
-    (final: prev: { zigpkgs = inputs.zig.packages.${prev.stdenv.hostPlatform.system}; })
-    inputs.helix.overlays.default
-  ];
   environment.systemPackages = with pkgs; [
     git
     curl
