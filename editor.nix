@@ -184,7 +184,10 @@
         }
       ];
     };
-    zls.config.zls.enable_argument_placeholders = false;
+    zls.config.zls = {
+      enable_argument_placeholders = false;
+      warn_style = true;
+    };
   };
   home.file.".config/clangd/config.yaml".text = ''
     Completion:
@@ -355,12 +358,6 @@
       {
         name = "zig";
         auto-format = true;
-        language-servers = [
-          {
-            name = "zls";
-            except-features = [ "diagnostics" ];
-          }
-        ];
       }
     ];
 }
