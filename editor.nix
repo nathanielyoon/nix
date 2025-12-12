@@ -186,17 +186,14 @@
     };
     zls.config.zls.enable_argument_placeholders = false;
   };
-  home.file.clangd = {
-    text = ''
-      Completion:
-        ArgumentLists: Delimiters
-      Hover:
-        MacroContentLimit: 0
-      Documentation:
-        CommentFormat: Markdown
-    '';
-    target = ".config/clangd/config.yaml";
-  };
+  home.file.".config/clangd/config.yaml".text = ''
+    Completion:
+      ArgumentLists: Delimiters
+    Hover:
+      MacroContentLimit: 0
+    Documentation:
+      CommentFormat: Markdown
+  '';
   programs.helix.languages.language =
     let
       deno-fmt = extension: {
