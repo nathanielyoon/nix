@@ -91,7 +91,9 @@
           ];
           "~" = "switch_to_lowercase";
           "`" = "switch_case";
-          "x" = "extend_line";
+          "x" = "extend_line_up";
+          "X" = "extend_line_down";
+          "'" = "repeat_last_motion";
         };
       in
       {
