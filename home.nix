@@ -180,6 +180,7 @@ in
         ];
       };
       zls.config.zls.enable_argument_placeholders = false;
+      clangd.config.clangd.Completion.ArgumentLists = "Delimiters";
     };
     languages.language =
       let
