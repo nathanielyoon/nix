@@ -8,6 +8,15 @@ local font = wezterm.font({
 
 config.check_for_updates = false
 
+-- config.color_scheme = "rose-pine"
+config.color_scheme = "Moonfly (Gogh)"
+-- config.color_scheme = "Rydgel (terminal.sexy)"
+-- config.color_scheme = "VisiBone (terminal.sexy)"
+-- config.color_scheme = "Derp (terminal.sexy)"
+-- config.color_scheme = "Bitmute (terminal.sexy)"
+
+config.inactive_pane_hsb = { saturation = 1.0, brightness = 1.0 }
+
 -- Configure window.
 config.window_decorations = "NONE"
 config.window_padding = { left = 2, right = 1, top = 1, bottom = 1 }
