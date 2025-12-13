@@ -22,6 +22,7 @@
       "line-numbers"
       "diff"
     ];
+    auto-format = true;
     completion-timeout = 5;
     completion-trigger-len = 1;
     completion-replace = true;
@@ -206,7 +207,7 @@
   '';
   programs.helix.languages.language =
     let
-      auto-fmt = name: rest: { inherit name; auto-format = true; } // rest;
+      auto-fmt = rest: { auto-format = true; } // rest;
       deno-fmt = extension: {
         command = "deno";
         args = [
@@ -218,7 +219,7 @@
       };
     in
     [
-      (auto-fmt "nix" {})
+      (auto-fmt { name = "nix"; })
       {
         name = "bash";
         indent = {
