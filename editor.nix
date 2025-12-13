@@ -15,7 +15,7 @@
 
   # Configure editor settings.
   programs.helix.settings.editor = {
-    scrolloff = 0;
+    scrolloff = 3;
     scroll-lines = 2;
     line-number = "relative";
     gutters = [
@@ -166,7 +166,7 @@
           environment.NO_COLOR = "1";
           config.deno = {
             enable = true;
-            lint = false;
+            lint = true;
             unstable = true;
             maxTsServerMemory = 24576;
             cacheOnSave = true;
@@ -219,8 +219,8 @@
             };
             formatter = command "shfmt --indent 4";
           };
-          c = { };
-          cpp = { };
+          c.formatter.command = "clang-format";
+          cpp.formatter.command = "clang-format";
           css.formatter = deno-fmt "css";
           html = {
             language-servers = [ "superhtml" ];
@@ -273,10 +273,9 @@
             formatter = deno-fmt "jsonc";
           };
           lua.formatter = command "stylua -";
-          markdown = {
-            formatter = deno-fmt "md";
-          };
-          python = { };
+          markdown.formatter = deno-fmt "md";
+          nix = { };
+          python.formatter = command "ruff format -";
           sql.formatter = deno-fmt "sql";
           toml = {
             # Required to avoid `this document has been excluded`. See
