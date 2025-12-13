@@ -59,7 +59,7 @@
       Behavior = "accept";
       Locked = false;
     };
-    DefaultDownloadDirectory = "/home/nathaniel/all/downloads";
+    DefaultDownloadDirectory = "/home/nathaniel/use/downloads";
     DisableFeedbackCommands = true;
     DisableFirefoxStudies = true;
     DisableFormHistory = true;

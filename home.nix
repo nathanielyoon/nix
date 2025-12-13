@@ -292,14 +292,14 @@ in
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
   services.wpaperd = enable [ "settings" "default" "path" ] "/home/nathaniel/use/leo.jpeg";
   xdg.userDirs = enable [ ] {
-    desktop = "$HOME/all/Desktop";
-    documents = "$HOME/all/Desktop/documents";
-    download = "$HOME/all/downloads";
-    music = "$HOME/all/Desktop/music";
-    pictures = "$HOME/all/Desktop/pictures";
-    publicShare = "$HOME/all/Desktop/public-share";
-    templates = "$HOME/all/Desktop/templates";
-    videos = "$HOME/save/Desktop/videos";
+    desktop = "$HOME/use/Desktop";
+    documents = "$HOME/use/Desktop/documents";
+    download = "$HOME/use/downloads";
+    music = "$HOME/use/Desktop/music";
+    pictures = "$HOME/use/Desktop/pictures";
+    publicShare = "$HOME/use/Desktop/public-share";
+    templates = "$HOME/use/Desktop/templates";
+    videos = "$HOME/use/Desktop/videos";
   };
 
   # Configure home-manager.
