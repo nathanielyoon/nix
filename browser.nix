@@ -52,22 +52,30 @@
     };
   };
   programs.librewolf.policies = {
+    AppAutoUpdate = false;
     AutofillAddressEnabled = false;
     AutofillCreditCardEnabled = false;
+    Cookies = {
+      Behavior = "accept";
+      Locked = false;
+    };
     DefaultDownloadDirectory = "/home/nathaniel/all/downloads";
     DisableFeedbackCommands = true;
     DisableFirefoxStudies = true;
+    DisableFormHistory = true;
     DisableMasterPasswordCreation = true;
     DisablePocket = true;
     DisableProfileImport = true;
+    DisableSetDesktopBackground = true;
     DisableTelemetry = true;
     DisplayBookmarksToolbar = "newtab";
     DontCheckDefaultBrowser = true;
     EnableTrackingProtection = {
-      Value = true;
       Cryptomining = true;
       Fingerprinting = true;
       EmailTracking = true;
+      Locked = true;
+      Value = true;
     };
     ExtensionUpdate = true;
     FirefoxHome = {
@@ -95,9 +103,10 @@
     ];
     HttpsOnlyMode = "enabled";
     ManualAppUpdateOnly = true;
-    OfferToSaveLogins = false;
     NetworkPrediction = true;
     NoDefaultBookmarks = true;
+    OfferToSaveLogins = false;
+    OverrideFirstRunPage = "";
     PasswordManagerEnabled = false;
     PostQuantumKeyAgreementEnabled = true;
     PrimaryPassword = false;
