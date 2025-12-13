@@ -117,7 +117,7 @@
   };
   programs.librewolf.policies.Preferences = {
     # Disable warning on `about:config` page.
-    "browser.aboutConfig.showWarning" = true;
+    "browser.aboutConfig.showWarning" = false;
     # `Reject-all if possible, otherwise accept-all.`
     "cookiebanners.service.mode" = 2;
     "cookiebanners.service.mode.privateBrowsing" = 2;
