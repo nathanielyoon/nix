@@ -207,7 +207,6 @@
   '';
   programs.helix.languages.language =
     let
-      auto-fmt = rest: { auto-format = true; } // rest;
       deno-fmt = extension: {
         command = "deno";
         args = [
@@ -219,7 +218,10 @@
       };
     in
     [
-      (auto-fmt { name = "nix"; })
+      {
+        name = "nix";
+        auto-format = true;
+      }
       {
         name = "bash";
         indent = {
@@ -326,6 +328,30 @@
         formatter = deno-fmt "md";
         language-servers = [ "marksman" ];
         auto-format = true;
+      }
+      {
+        name = "css";
+        formatter = deno-fmt "css";
+        auto-format = true;
+      }
+      {
+        name = "c";
+        auto-format = true;
+      }
+      {
+        name = "cpp";
+        auto-format = true;
+      }
+      {
+        name = "python";
+        auto-format = true;
+      }
+      {
+        name = "lua";
+        formatter = {
+          command = "stylua";
+          args = [ "-" ];
+        };
       }
     ];
 }
