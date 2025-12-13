@@ -8,6 +8,85 @@
     "privacy.clearOnShutdown.downloads" = true;
     "privacy.resistFingerprinting" = false;
     "privacy.fingerprintingProtection" = true;
+
+    # Disable warning on `about:config` page.
+    "browser.aboutConfig.showWarning" = true;
+    # `Reject-all if possible, otherwise accept-all.`
+    "cookiebanners.service.mode" = 2;
+    "cookiebanners.service.mode.privateBrowsing" = 2;
+    # Allow more caching.
+    "browser.cache.disk.enable" = true;
+    "browser.cache.disk.metadata_memory_limit" = 256 * 1024;
+    "browser.cache.disk.smart_size.enabled" = true;
+    "browser.cache.disk.preload_chunk_count" = 16;
+    # Enable compact mode.
+    "browser.compactmode.show" = true;
+    "browser.uidensity" = 1;
+    # Put tabs in titlebar.
+    "browser.tabs.inTitleBar" = true;
+    # Don't save zoom-in/out settings for a given site.
+    "browser.zoom.siteSpecific" = false;
+    # Disable new tab page.
+    "browser.newtabpage.enabled" = false;
+    # Keep scrollbars visible.
+    "layout.testing.overlay-scrollbars.always-visible" = true;
+    "widget.gtk.overlay-scrollbars.enabled" = false;
+    # Use thinner scrollbar style (from Android).
+    "widget.non-native-theme.scrollbar.style" = 3;
+    # Allow `userChrome.css` customization.
+    "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
+    # Turn off swipe for history back-and-forth.
+    "widget.disable-swipe-tracker" = true;
+    # Disable AI features.
+    "browser.ml.enable" = false;
+    "browser.ml.chat.enabled" = false;
+    "browser.ml.chat.hideFromLabs" = true;
+    "browser.ml.chat.hideLabsShortcuts" = true;
+    "browser.ml.chat.page" = false;
+    "browser.ml.chat.page.footerBadge" = false;
+    "browser.ml.chat.page.menuBadge" = false;
+    "browser.ml.chat.menu" = false;
+    "browser.ml.linkPreview.enabled" = false;
+    "browser.ml.pageAssist.enabled" = false;
+    "browser.tabs.groups.smart.enabled" = false;
+    "browser.tabs.groups.smart.userEnable" = false;
+    "extensions.ml.enabled" = false;
+    # Limit suggestions.
+    "browser.urlbar.showSearchSuggestionsFirst" = false;
+    "browser.urlbar.suggest.addons" = false;
+    "browser.urlbar.suggest.amp" = false;
+    "browser.urlbar.suggest.bookmark" = false;
+    "browser.urlbar.suggest.engines" = false;
+    "browser.urlbar.suggest.history" = false;
+    "browser.urlbar.suggest.openpage" = false;
+    "browser.urlbar.suggest.quickactions" = false;
+    "browser.urlbar.suggest.topsites" = false;
+    "browser.urlbar.suggest.trending" = false;
+    "browser.urlbar.suggest.weather" = false;
+    "browser.urlbar.suggest.yelp" = false;
+    "browser.urlbar.suggest.yelpRealtime" = false;
+    # Disable tab groups.
+    "browser.tabs.groups.enabled" = false;
+    # Disable some drag-and-drop interactions.
+    "browser.tabs.dragDrop.pinInteractionCue.delayMS" = 600000;
+    "browser.tabs.dragDrop.selectTab.delayMS" = 600000;
+    # Disable tab hover preview.
+    "browser.tabs.hoverPreview.enabled" = false;
+    # Use better file picker.
+    "widget.use-xdg-desktop-portal.file-picker" = true;
+    # Only show bookmarks on new tab.
+    "browser.toolbars.bookmarks.visibility" = "newtab";
+    # Open tabs at the end.
+    "browser.tabs.insertAfterCurrent" = false;
+    "browser.tabs.insertRelatedAfterCurrent" = false;
+    # Open files in `/tmp`.
+    "browser.download.start_downloads_in_tmp_dir" = true;
+    # Keep more history.
+    "places.history.expiration.max_pages" = 2147483647;
+    # Speed up network stuff.
+    "network.prefetch-next" = true;
+    "network.http.max-connections" = 2048;
+    "network.http.max-persistent-connections-per-server" = 16;
     "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC";
   };
   programs.librewolf.profiles.default = {
@@ -100,86 +179,6 @@
     NoDefaultBookmarks = true;
     PasswordManagerEnabled = false;
     PostQuantumKeyAgreementEnabled = true;
-    Preferences = {
-      # Disable warning on `about:config` page.
-      "browser.aboutConfig.showWarning" = true;
-      # `Reject-all if possible, otherwise accept-all.`
-      "cookiebanners.service.mode" = 2;
-      "cookiebanners.service.mode.privateBrowsing" = 2;
-      # Allow more caching.
-      "browser.cache.disk.enable" = true;
-      "browser.cache.disk.metadata_memory_limit" = 256 * 1024;
-      "browser.cache.disk.smart_size.enabled" = true;
-      "browser.cache.disk.preload_chunk_count" = 16;
-      # Enable compact mode.
-      "browser.compactmode.show" = true;
-      "browser.uidensity" = 1;
-      # Put tabs in titlebar.
-      "browser.tabs.inTitleBar" = true;
-      # Don't save zoom-in/out settings for a given site.
-      "browser.zoom.siteSpecific" = false;
-      # Disable new tab page.
-      "browser.newtabpage.enabled" = false;
-      # Keep scrollbars visible.
-      "layout.testing.overlay-scrollbars.always-visible" = true;
-      "widget.gtk.overlay-scrollbars.enabled" = false;
-      # Use thinner scrollbar style (from Android).
-      "widget.non-native-theme.scrollbar.style" = 3;
-      # Allow `userChrome.css` customization.
-      "toolkit.legacyUserProfileCustomizations.stylesheets" = true;
-      # Turn off swipe for history back-and-forth.
-      "widget.disable-swipe-tracker" = true;
-      # Disable AI features.
-      "browser.ml.enable" = false;
-      "browser.ml.chat.enabled" = false;
-      "browser.ml.chat.hideFromLabs" = true;
-      "browser.ml.chat.hideLabsShortcuts" = true;
-      "browser.ml.chat.page" = false;
-      "browser.ml.chat.page.footerBadge" = false;
-      "browser.ml.chat.page.menuBadge" = false;
-      "browser.ml.chat.menu" = false;
-      "browser.ml.linkPreview.enabled" = false;
-      "browser.ml.pageAssist.enabled" = false;
-      "browser.tabs.groups.smart.enabled" = false;
-      "browser.tabs.groups.smart.userEnable" = false;
-      "extensions.ml.enabled" = false;
-      # Limit suggestions.
-      "browser.urlbar.showSearchSuggestionsFirst" = false;
-      "browser.urlbar.suggest.addons" = false;
-      "browser.urlbar.suggest.amp" = false;
-      "browser.urlbar.suggest.bookmark" = false;
-      "browser.urlbar.suggest.engines" = false;
-      "browser.urlbar.suggest.history" = false;
-      "browser.urlbar.suggest.openpage" = false;
-      "browser.urlbar.suggest.quickactions" = false;
-      "browser.urlbar.suggest.topsites" = false;
-      "browser.urlbar.suggest.trending" = false;
-      "browser.urlbar.suggest.weather" = false;
-      "browser.urlbar.suggest.yelp" = false;
-      "browser.urlbar.suggest.yelpRealtime" = false;
-      # Disable tab groups.
-      "browser.tabs.groups.enabled" = false;
-      # Disable some drag-and-drop interactions.
-      "browser.tabs.dragDrop.pinInteractionCue.delayMS" = 600000;
-      "browser.tabs.dragDrop.selectTab.delayMS" = 600000;
-      # Disable tab hover preview.
-      "browser.tabs.hoverPreview.enabled" = false;
-      # Use better file picker.
-      "widget.use-xdg-desktop-portal.file-picker" = true;
-      # Only show bookmarks on new tab.
-      "browser.toolbars.bookmarks.visibility" = "newtab";
-      # Open tabs at the end.
-      "browser.tabs.insertAfterCurrent" = false;
-      "browser.tabs.insertRelatedAfterCurrent" = false;
-      # Open files in `/tmp`.
-      "browser.download.start_downloads_in_tmp_dir" = true;
-      # Keep more history.
-      "places.history.expiration.max_pages" = 2147483647;
-      # Speed up network stuff.
-      "network.prefetch-next" = true;
-      "network.http.max-connections" = 2048;
-      "network.http.max-persistent-connections-per-server" = 16;
-    };
     PrimaryPassword = false;
     PrintingEnabled = true;
     PromptForDownloadLocation = true;
