@@ -157,7 +157,7 @@
       language-server = {
         # Use one of the language servers based on roots, see
         # <https://github.com/helix-editor/helix/discussions/11418#discussioncomment-10235793>.
-        typescript-language-sever.required-root-patterns = [
+        typescript-language-server.required-root-patterns = [
           "tsconfig.json"
           "package.json"
         ];
@@ -241,7 +241,7 @@
             ];
             language-servers = [
               "deno-lsp"
-              "typescript-language-sever"
+              "typescript-language-server"
             ];
             formatter = deno-fmt "ts";
           };
