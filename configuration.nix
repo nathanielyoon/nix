@@ -16,7 +16,7 @@
     jq
     gtrash
     just
-    zigpkgs.master
+    zigpkgs
     zig-shell-completions
     wezterm
   ];
@@ -35,9 +35,7 @@
   networking.useDHCP = lib.mkDefault true;
   networking.wireless.iwd.enable = true;
   # Set region for wifi. See <https://community.frame.work/t/42901/21>.
-  boot.extraModprobeConfig = ''
-    options cfg80211 ieee80211_regdom=US
-  '';
+  boot.extraModprobeConfig = "options cfg80211 ieee80211_regdom=US";
   networking.networkmanager = {
     enable = true;
     wifi.backend = "iwd";
@@ -67,7 +65,6 @@
     completion.enable = true;
     promptInit = ''
       PS1='\W \$ '
-
       if [[ -n "$PROMPT_COMMAND" ]]; then PROMPT_COMMAND+="; history -a"
       else PROMPT_COMMAND="history -a"; fi
     '';
@@ -84,18 +81,20 @@
       "cd.." = "cd ..";
       tp = "gtrash put";
     };
-    interactiveShellInit = lib.mkAfter ''
-      _completion_loader lsd
-      complete -o bashdefault -o default -o nosort -F _lsd l la ll lla lt lta llt llta
-      _completion_loader systemctl
-      complete -F _systemctl sc
-      . ${
-        builtins.fetchurl {
+    interactiveShellInit =
+      let
+        wezterm = builtins.fetchurl {
           url = "https://raw.githubusercontent.com/wezterm/wezterm/refs/heads/main/assets/shell-integration/wezterm.sh";
           sha256 = "1b5rxq9lzqw5gf3islamgqwsilyiw9svhq51249lxgq72drq608r";
-        }
-      }
-    '';
+        };
+      in
+      lib.mkAfter ''
+        _completion_loader lsd
+        complete -o bashdefault -o default -o nosort -F _lsd l la ll lla lt lta llt llta
+        _completion_loader systemctl
+        complete -F _systemctl sc
+        source ${wezterm}
+      '';
   };
 
   # Define user.
@@ -187,18 +186,16 @@
 
   # Configure nix.
   system.stateVersion = "26.05";
-  nix = {
-    settings = {
-      experimental-features = [
-        "nix-command"
-        "flakes"
-        "pipe-operators"
-      ];
-      use-xdg-base-directories = true;
-      warn-dirty = false;
-      download-buffer-size = 536870912;
-      auto-optimise-store = true;
-    };
+  nix.settings = {
+    experimental-features = [
+      "nix-command"
+      "flakes"
+      "pipe-operators"
+    ];
+    use-xdg-base-directories = true;
+    warn-dirty = false;
+    download-buffer-size = 536870912;
+    auto-optimise-store = true;
   };
   programs.nh = {
     enable = true;

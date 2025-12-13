@@ -41,7 +41,7 @@
         {
           nixpkgs.overlays = [
             (final: prev: {
-              zigpkgs = inputs.zig.packages.${prev.stdenv.hostPlatform.system};
+              zigpkgs = inputs.zig.packages.${prev.stdenv.hostPlatform.system}.master;
               wezterm = inputs.wezterm.packages.${prev.stdenv.hostPlatform.system}.default;
             })
             inputs.helix.overlays.default
