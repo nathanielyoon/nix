@@ -7,7 +7,6 @@
   };
   home.packages = with pkgs; [
     nil
-    nixd
     nixfmt-rfc-style
     bash-language-server
     shfmt
@@ -163,7 +162,6 @@
       command = "nil";
       config.nil.nix.flake.autoArchive = true;
     };
-    nixd.command = "nixd";
     vscode-json = {
       command = "vscode-json-language-server";
       args = [ "--stdio" ];
@@ -212,11 +210,6 @@
     [
       {
         name = "nix";
-        formatter.command = "nixfmt";
-        language-servers = [
-          "nixd"
-          "nil"
-        ];
         auto-format = true;
       }
       {

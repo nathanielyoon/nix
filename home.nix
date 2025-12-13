@@ -86,6 +86,12 @@ in
     pandoc
     xh
     git-filter-repo
+    (writeShellScriptBin "gf" ''
+      if [[ $# -eq 0 ]]; then git pull
+      elif [[ $1 =~ : ]]; then git clone "$@"
+      elif [[ $1 =~ / ]]; then git clone "git@github.com:$1"
+      else git clone "git@github.com:nathanielyoon/$1"; fi
+    '')
     (writeShellScriptBin "gl" ''
       git log --oneline "$@"
     '')
