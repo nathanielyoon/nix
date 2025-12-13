@@ -74,25 +74,30 @@
         "`" = "switch_case";
         "x" = "extend_line_below";
         "X" = "extend_line_above";
+        "'" = "repeat_last_motion";
       };
     in
     {
       normal = normal // {
         "H" = [
+          "select_mode"
           "ensure_selections_forward"
           "flip_selections"
           "goto_first_nonwhitespace"
-        ];
-        "L" = [
-          "ensure_selections_forward"
-          "goto_line_end"
-        ];
-        "'" = [
-          "select_mode"
-          "no_op"
-          "repeat_last_motion"
           "normal_mode"
         ];
+        "L" = [
+          "select_mode"
+          "ensure_selections_forward"
+          "goto_line_end"
+          "normal_mode"
+        ];
+        # Replicates old repeat_last_motion behavior.
+        # See <https://github.com/helix-editor/helix/discussions/7710#discussioncomment-6517417>.
+        "f" = "extend_next_char";
+        "F" = "extend_prev_char";
+        "t" = "extend_till_char";
+        "T" = "extend_till_prev_char";
       };
       select = normal // {
         "H" = [
@@ -104,7 +109,6 @@
           "ensure_selections_forward"
           "goto_line_end"
         ];
-        "'" = "repeat_last_motion";
       };
       insert = insert;
     };
