@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 {
   # Enable helix editor.
   programs.helix = {
@@ -93,8 +93,8 @@
           "goto_line_end"
           "normal_mode"
         ];
-        # Replicates old repeat_last_motion behavior.
-        # See <https://github.com/helix-editor/helix/discussions/7710#discussioncomment-6517417>.
+        # Replicates old repeat_last_motion behavior. See
+        # <https://github.com/helix-editor/helix/discussions/7710#discussioncomment-6517417>.
         "f" = "extend_next_char";
         "F" = "extend_prev_char";
         "t" = "extend_till_char";
@@ -136,67 +136,170 @@
     kdlfmt
     lua-language-server
     stylua
+    typescript
+    typescript-go
+    typescript-language-server
   ];
-  programs.helix.languages.language-server = {
-    deno-lsp = {
-      command = "deno";
-      args = [ "lsp" ];
-      environment.NO_COLOR = "1";
-      config.deno = {
-        enable = true;
-        lint = false;
-        unstable = true;
-        maxTsServerMemory = 24576;
-        cacheOnSave = true;
-        disablePaths = [ "./dist" ];
-        typescript.preferences = {
-          useAliasesForRenames = false;
-          importModuleSpecifierPreference = "project-relative";
-          diagnostics.ignoredCodes = [
-            2581
-            2582
-          ];
+  programs.helix.languages =
+    let
+      command =
+        string:
+        let
+          parts = lib.splitString " " string;
+        in
+        {
+          command = builtins.head parts;
+          args = builtins.tail parts;
+
+        };
+    in
+    {
+      language-server = {
+        # Use one of the language servers based on roots, see
+        # <https://github.com/helix-editor/helix/discussions/11418#discussioncomment-10235793>.
+        typescript-language-sever.required-root-patterns = [
+          "tsconfig.json"
+          "package.json"
+        ];
+        deno-lsp = command "deno lsp" // {
+          required-root-patterns = [ ];
+          environment.NO_COLOR = "1";
+          config.deno = {
+            enable = true;
+            lint = false;
+            unstable = true;
+            maxTsServerMemory = 24576;
+            cacheOnSave = true;
+            disablePaths = [ "./dist" ];
+            typescript.preferences = {
+              useAliasesForRenames = false;
+              importModuleSpecifierPreference = "project-relative";
+              diagnostics.ignoredCodes = [
+                2581
+                2582
+              ];
+            };
+          };
+        };
+        ruff = command "ruff server";
+        superhtml = command "superhtml lsp";
+        nil.config.nil.nix = {
+          maxMemoryMB = 8590; # 8 GiB, because toml doesn't support null
+          flake.autoArchive = true;
+        };
+        vscode-json-language-server.config.json.schemas =
+          lib.attrsToList {
+            "https://raw.githubusercontent.com/denoland/deno/main/cli/schemas/config-file.v1.json" = [
+              "deno.json"
+              "deno.jsonc"
+            ];
+            "https://unpkg.com/wrangler@latest/config-schema.json" = [
+              "wrangler.json"
+              "wrangler.jsonc"
+            ];
+          }
+          |> builtins.map (pair: {
+            url = pair.name;
+            fileMatch = pair.value;
+          });
+        zls.config.zls = {
+          enable_argument_placeholders = false;
+          warn_style = true;
         };
       };
-    };
-    ruff = {
-      command = "ruff";
-      args = [ "server" ];
-    };
-    tinymist.command = "tinymist";
-    superhtml = {
-      commmand = "superhtml";
-      args = [ "lsp" ];
-    };
-    nil = {
-      command = "nil";
-      config.nil.nix.flake.autoArchive = true;
-    };
-    vscode-json = {
-      command = "vscode-json-language-server";
-      args = [ "--stdio" ];
-      config.json.schemas = [
-        {
-          fileMatch = [
-            "deno.json"
-            "deno.jsonc"
-          ];
-          url = "https://raw.githubusercontent.com/denoland/deno/main/cli/schemas/config-file.v1.json";
+      language =
+        let
+          deno-fmt = extension: command "deno fmt --ext ${extension} --unstable-sql -";
+        in
+        lib.attrsToList {
+          bash = {
+            indent = {
+              tab-width = 4;
+              unit = "    ";
+            };
+            formatter = command "shfmt --indent 4";
+          };
+          c = { };
+          cpp = { };
+          css.formatter = deno-fmt "css";
+          html = {
+            language-servers = [ "superhtml" ];
+            formatter = command "superhtml fmt --stdin";
+          };
+          typescript = {
+            shebangs = [ "deno" ];
+            roots = [
+              "deno.json"
+              "deno.jsonc"
+              "package.json"
+              "tsconfig.json"
+            ];
+            file-types = [
+              "ts"
+              "mts"
+              "cts"
+            ];
+            language-servers = [
+              "deno-lsp"
+              "typescript-language-sever"
+            ];
+            formatter = deno-fmt "ts";
+          };
+          javascript = {
+            shebangs = [ "node" ];
+            roots = [
+              "deno.json"
+              "deno.jsonc"
+              "package.json"
+              "tsconfig.json"
+            ];
+            file-types = [
+              "js"
+              "mjs"
+              "cjs"
+            ];
+            language-servers = [
+              "deno-lsp"
+              "typescript-language-server"
+            ];
+            formatter = deno-fmt "js";
+          };
+          json.formatter = deno-fmt "json";
+          jsonc = {
+            file-types = [
+              "jsonc"
+              { glob = "{deno,bun}.lock"; }
+            ];
+            formatter = deno-fmt "jsonc";
+          };
+          lua.formatter = command "stylua -";
+          markdown = {
+            formatter = deno-fmt "md";
+          };
+          python = { };
+          sql.formatter = deno-fmt "sql";
+          toml = {
+            # Required to avoid `this document has been excluded`. See
+            # <https://github.com/tamasfe/taplo/issues/580#issuecomment-2004174721>.
+            roots = [ "." ];
+            formatter = command "taplo fmt -";
+          };
+          typst.formatter = command "typstyle --wrap-text";
         }
-        {
-          fileMatch = [
-            "wrangler.json"
-            "wrangler.jsonc"
-          ];
-          url = "https://unpkg.com/wrangler@latest/config-schema.json";
-        }
-      ];
+        |> builtins.map (
+          { name, value }:
+          value
+          // {
+            inherit name;
+            auto-format = true;
+          }
+        );
     };
-    zls.config.zls = {
-      enable_argument_placeholders = false;
-      warn_style = true;
-    };
-  };
+  # Required to avoid `this document has been excluded`. See
+  # <https://github.com/tamasfe/taplo/issues/320#issuecomment-2897257730>.
+  home.file.".taplo.toml".text = ''
+    include = ["**/*.toml", "**/*.toml.tmpl"]
+  '';
   home.file.".config/clangd/config.yaml".text = ''
     Completion:
       ArgumentLists: Delimiters
@@ -205,153 +308,4 @@
     Documentation:
       CommentFormat: Markdown
   '';
-  programs.helix.languages.language =
-    let
-      deno-fmt = extension: {
-        command = "deno";
-        args = [
-          "fmt"
-          "-"
-          "--ext"
-          extension
-        ];
-      };
-    in
-    [
-      {
-        name = "nix";
-        auto-format = true;
-      }
-      {
-        name = "bash";
-        indent = {
-          tab-width = 4;
-          unit = "    ";
-        };
-        formatter = {
-          command = "shfmt";
-          args = [
-            "-i"
-            "4"
-          ];
-        };
-        auto-format = true;
-      }
-      {
-        name = "typst";
-        language-servers = [ "tinymist" ];
-        formatter = {
-          command = "typstyle";
-          args = [ "--wrap-text" ];
-        };
-        auto-format = true;
-      }
-      {
-        name = "toml";
-        formatter = {
-          command = "taplo";
-          args = [
-            "fmt"
-            "-"
-          ];
-        };
-        auto-format = true;
-      }
-      {
-        name = "html";
-        language-servers = [ "superhtml" ];
-        formatter = {
-          command = "superhtml";
-          args = [
-            "fmt"
-            "--stdin"
-          ];
-        };
-        auto-format = true;
-      }
-      {
-        name = "typescript";
-        shebangs = [ "deno" ];
-        roots = [
-          "deno.json"
-          "deno.jsonc"
-          "package.json"
-          "tsconfig.json"
-        ];
-        file-types = [
-          "ts"
-          "mts"
-          "cts"
-        ];
-        language-servers = [ "deno-lsp" ];
-        formatter = deno-fmt "ts";
-        auto-format = true;
-      }
-      {
-        name = "javascript";
-        shebangs = [ "node" ];
-        roots = [
-          "deno.json"
-          "deno.jsonc"
-          "package.json"
-          "tsconfig.json"
-        ];
-        file-types = [
-          "js"
-          "mjs"
-          "cjs"
-        ];
-        language-servers = [ "deno-lsp" ];
-        formatter = deno-fmt "js";
-        auto-format = true;
-      }
-      {
-        name = "json";
-        formatter = deno-fmt "json";
-        language-servers = [ "vscode-json" ];
-        auto-format = true;
-      }
-      {
-        name = "jsonc";
-        scope = "source.json";
-        injection-regex = "jsonc";
-        file-types = [
-          "jsonc"
-          { glob = "{deno,bun}.lock"; }
-        ];
-        formatter = deno-fmt "jsonc";
-        language-servers = [ "vscode-json" ];
-        auto-format = true;
-      }
-      {
-        name = "markdown";
-        formatter = deno-fmt "md";
-        language-servers = [ "marksman" ];
-        auto-format = true;
-      }
-      {
-        name = "css";
-        formatter = deno-fmt "css";
-        auto-format = true;
-      }
-      {
-        name = "c";
-        auto-format = true;
-      }
-      {
-        name = "cpp";
-        auto-format = true;
-      }
-      {
-        name = "python";
-        auto-format = true;
-      }
-      {
-        name = "lua";
-        formatter = {
-          command = "stylua";
-          args = [ "-" ];
-        };
-      }
-    ];
 }
