@@ -4,20 +4,20 @@
   environment.systemPackages = with pkgs; [
     git
     curl
+    helix
+    pkgs.man-pages
+    pkgs.man-pages-posix
     lsd
     ripgrep
     fd
     choose
     sd
     fzf
-    helix
+    gtrash
+    just
     zigpkgs.master
     zig-shell-completions
     wezterm
-    pkgs.man-pages
-    pkgs.man-pages-posix
-    gtrash
-    just
   ];
   programs.niri.enable = true;
   environment.variables = {

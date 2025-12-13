@@ -86,17 +86,17 @@
     hideMounts = true;
     directories = [
       "/var/log"
-      "/var/lib/systemd"
-      "/var/lib/nixos"
-      "/var/lib/fprint"
       "/var/lib/bluetooth"
-      "/var/lib/NetworkManager"
-      "/var/lib/iwd"
+      "/var/lib/fprint"
+      "/var/lib/nixos"
+      "/var/lib/systemd/coredump"
+      "/var/lib/systemd/timers"
       "/etc/NetworkManager/system-connections"
     ];
     files = [ "/etc/machine-id" ];
     users.nathaniel = {
       directories = [
+        ".cache"
         ".librewolf"
         ".ssh"
         "all"
