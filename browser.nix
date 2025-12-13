@@ -62,10 +62,10 @@
     };
 
     # Disable features and integrations.
-    DisableMenuBar = "never";
     DisablePocket = true;
     DisableProfileImport = true;
     DisableSetDesktopBackground = true;
+    DisplayMenuBar = "never";
     FirefoxSuggest = {
       WebSuggestions = true;
       SponsoredSuggestions = false;
