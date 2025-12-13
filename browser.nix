@@ -1,6 +1,23 @@
 { pkgs, config, ... }:
 {
+  # Enable librewolf browser.
   programs.librewolf.enable = true;
+  xdg.desktopEntries.librewolf = {
+    name = "LibreWolf";
+    exec = "${pkgs.librewolf}/bin/librewolf";
+  };
+  xdg.mimeApps = {
+    enable = true;
+    defaultApplications = {
+      "text/html" = "librewolf.desktop";
+      "x-scheme-handler/http" = "librewolf.desktop";
+      "x-scheme-handler/https" = "librewolf.desktop";
+      "x-scheme-handler/about" = "librewolf.desktop";
+      "x-scheme-handler/unknown" = "librewolf.desktop";
+    };
+  };
+
+  # Set librewolf-specific settings.
   programs.librewolf.settings = {
     "webgl.disabled" = false;
     "identity.fxaccounts.enabled" = true;
@@ -10,74 +27,28 @@
     "privacy.fingerprintingProtection" = true;
     "privacy.fingerprintingProtection.overrides" = "+AllTargets,-JSDateTimeUTC";
   };
-  programs.librewolf.profiles.default = {
-    search = {
-      force = true;
-      engines = {
-        nixos-wiki = {
-          name = "NixOS Wiki";
-          urls = [ { template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; } ];
-          iconMapObj."16" = "https://wiki.nixos.org/favicon.ico";
-          definedAliases = [ "@nw" ];
-        };
-        league-of-legends-wiki = {
-          name = "League of Legends Wiki";
-          urls = [ { template = "https://wiki.leagueoflegends.com/en-us/?search={searchTerms}"; } ];
-          iconMapObj."16" = "https://wiki.leagueoflegends.com/favicon.ico";
-          definedAliases = [ "@lol" ];
-        };
-        scryfall = {
-          name = "Scryfall";
-          urls = [ { template = "https://scryfall.com/search?q={searchTerms}"; } ];
-          iconMapObj."16" = "https://scryfall.com/favicon.ico";
-          definedAliases = [ "@sf" ];
-        };
-        hn = {
-          name = "Hacker News";
-          urls = [ { template = "https://hn.algolia.com/?q={searchTerms}"; } ];
-          iconMapObj."16" = "https://news.ycombinator.com/favicon.ico";
-          definedAliases = [ "@hn" ];
-        };
-        google.metaData.hidden = true;
-        bing.metaData.hidden = true;
-        "policy-DuckDuckGo Lite".metaData.hidden = true;
-        "policy-SearXNG - searx.be".metaData.hidden = true;
-        "policy-MetaGer".metaData.hidden = true;
-        "policy-StartPage".metaData.hidden = true;
-        "policy-Mojeek".metaData.hidden = true;
-      };
-      default = "ddg";
-      privateDefault = "ddg";
-      order = [ "ddg" ];
-    };
-  };
+
   programs.librewolf.policies = {
+    # Nix handles this.
     AppAutoUpdate = false;
+    ManualAppUpdateOnly = true;
+    DisableSystemAddonUpdate = true;
+    DontCheckDefaultBrowser = true;
+
+    # Disable credential management.
     AutofillAddressEnabled = false;
     AutofillCreditCardEnabled = false;
-    Cookies = {
-      Behavior = "accept";
-      Locked = false;
-    };
-    DefaultDownloadDirectory = "/home/nathaniel/use/downloads";
+    DisableMasterPasswordCreation = true;
+    OfferToSaveLogins = false;
+    PasswordManagerEnabled = false;
+    PrimaryPassword = false;
+
+    # Disable telemetry.
     DisableFeedbackCommands = true;
     DisableFirefoxStudies = true;
-    DisableFormHistory = true;
-    DisableMasterPasswordCreation = true;
-    DisablePocket = true;
-    DisableProfileImport = true;
-    DisableSetDesktopBackground = true;
     DisableTelemetry = true;
-    DisplayBookmarksToolbar = "newtab";
-    DontCheckDefaultBrowser = true;
-    EnableTrackingProtection = {
-      Cryptomining = true;
-      Fingerprinting = true;
-      EmailTracking = true;
-      Locked = true;
-      Value = true;
-    };
-    ExtensionUpdate = true;
+
+    # Clear Firefox Home.
     FirefoxHome = {
       Search = false;
       TopSites = false;
@@ -89,30 +60,19 @@
       SponsoredStories = false;
       Snippets = false;
     };
+
+    # Disable features and integrations.
+    DisableMenuBar = "never";
+    DisablePocket = true;
+    DisableProfileImport = true;
+    DisableSetDesktopBackground = true;
     FirefoxSuggest = {
       WebSuggestions = true;
       SponsoredSuggestions = false;
       ImproveSuggest = false;
     };
-    HardwareAcceleration = true;
-    HttpAllowlist = [
-      "http://localhost"
-      "http://127.0.0.1"
-      "http://0.0.0.0"
-      "http://example.com"
-    ];
-    HttpsOnlyMode = "enabled";
-    ManualAppUpdateOnly = true;
-    NetworkPrediction = true;
+    GenerativeAI.Enabled = false;
     NoDefaultBookmarks = true;
-    OfferToSaveLogins = false;
-    OverrideFirstRunPage = "";
-    PasswordManagerEnabled = false;
-    PostQuantumKeyAgreementEnabled = true;
-    PrimaryPassword = false;
-    PrintingEnabled = true;
-    PromptForDownloadLocation = true;
-    SearchSuggestEnabled = true;
     ShowHomeButton = false;
     SkipTermsOfUse = true;
     UserMessaging = {
@@ -120,9 +80,47 @@
       ExtensionRecommendations = false;
       FeatureRecommendations = false;
       UrlbarInterventions = false;
-      SkipOnboarding = false;
+      SkipOnboarding = true;
       MoreFromMozilla = false;
+      FirefoxLabs = false;
     };
+    VisualSearchEnabled = false;
+
+    # Enable features and integrations.
+    SearchSuggestEnabled = true;
+    HardwareAcceleration = true;
+    NetworkPrediction = true;
+    PostQuantumKeyAgreementEnabled = true;
+    PrintingEnabled = true;
+
+    # Set defaults.
+    DefaultDownloadDirectory = "/home/nathaniel/use/downloads";
+    DisplayBookmarksToolbar = "newtab";
+    PromptForDownloadLocation = true;
+    ExtensionUpdate = true;
+    OverrideFirstRunPage = "";
+    OverridePostUpdatePage = "";
+    StartDownloadsInTempDirectory = true;
+
+    # Enable tracking protection with exceptions.
+    EnableTrackingProtection = {
+      Value = true;
+      Cryptomining = true;
+      Fingerprinting = true;
+      EmailTracking = true;
+      SuspectedFingerprinting = true;
+      BaselineExceptions = true;
+      ConvenienceExceptions = true;
+    };
+
+    # Use HTTPS with exceptions.
+    HttpAllowlist = [
+      "http://localhost"
+      "http://127.0.0.1"
+      "http://0.0.0.0"
+      "http://example.com"
+    ];
+    HttpsOnlyMode = "enabled";
   };
   programs.librewolf.policies.Preferences = {
     # Disable warning on `about:config` page.
@@ -204,20 +202,49 @@
     "network.http.max-connections" = 2048;
     "network.http.max-persistent-connections-per-server" = 16;
   };
-  home.file.".librewolf/default/chrome/userChrome.css".source =
-    config.lib.file.mkOutOfStoreSymlink "/home/nathaniel/nix/userChrome.css";
-  xdg.desktopEntries.librewolf = {
-    name = "LibreWolf";
-    exec = "${pkgs.librewolf}/bin/librewolf";
-  };
-  xdg.mimeApps = {
-    enable = true;
-    defaultApplications = {
-      "text/html" = "librewolf.desktop";
-      "x-scheme-handler/http" = "librewolf.desktop";
-      "x-scheme-handler/https" = "librewolf.desktop";
-      "x-scheme-handler/about" = "librewolf.desktop";
-      "x-scheme-handler/unknown" = "librewolf.desktop";
+
+  # Configure profile.
+  programs.librewolf.profiles.default = {
+    search = {
+      force = true;
+      engines = {
+        nixos-wiki = {
+          name = "NixOS Wiki";
+          urls = [ { template = "https://wiki.nixos.org/w/index.php?search={searchTerms}"; } ];
+          iconMapObj."16" = "https://wiki.nixos.org/favicon.ico";
+          definedAliases = [ "@nw" ];
+        };
+        league-of-legends-wiki = {
+          name = "League of Legends Wiki";
+          urls = [ { template = "https://wiki.leagueoflegends.com/en-us/?search={searchTerms}"; } ];
+          iconMapObj."16" = "https://wiki.leagueoflegends.com/favicon.ico";
+          definedAliases = [ "@lol" ];
+        };
+        scryfall = {
+          name = "Scryfall";
+          urls = [ { template = "https://scryfall.com/search?q={searchTerms}"; } ];
+          iconMapObj."16" = "https://scryfall.com/favicon.ico";
+          definedAliases = [ "@sf" ];
+        };
+        hn = {
+          name = "Hacker News";
+          urls = [ { template = "https://hn.algolia.com/?q={searchTerms}"; } ];
+          iconMapObj."16" = "https://news.ycombinator.com/favicon.ico";
+          definedAliases = [ "@hn" ];
+        };
+        google.metaData.hidden = true;
+        bing.metaData.hidden = true;
+        "policy-DuckDuckGo Lite".metaData.hidden = true;
+        "policy-SearXNG - searx.be".metaData.hidden = true;
+        "policy-MetaGer".metaData.hidden = true;
+        "policy-StartPage".metaData.hidden = true;
+        "policy-Mojeek".metaData.hidden = true;
+      };
+      default = "ddg";
+      privateDefault = "ddg";
+      order = [ "ddg" ];
     };
   };
+  home.file.".librewolf/default/chrome/userChrome.css".source =
+    config.lib.file.mkOutOfStoreSymlink "/home/nathaniel/nix/userChrome.css";
 }
