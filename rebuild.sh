@@ -5,7 +5,8 @@
     git commit --message "$* [$(
         sudo nix-env --list-generations --profile /nix/var/nix/profiles/system |
             grep current |
-            cut -d' ' -f3
+            awk '{$1=$1};1' |
+            cut -d' ' -f1
     )]"
     git push --quiet
 }
