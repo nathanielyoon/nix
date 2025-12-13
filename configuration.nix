@@ -22,11 +22,11 @@
   ];
   programs.niri.enable = true;
   environment.variables = {
-    WEZTERM_CONFIG_FILE = "$HOME/nix/term.lua";
-    NIRI_CONFIG = "$HOME/nix/wm.kdl";
-    GTRASH_HOME_TRASH_DIR = "$HOME/use/trash";
+    WEZTERM_CONFIG_FILE = "/home/nathaniel/nix/term.lua";
+    NIRI_CONFIG = "/home/nathaniel/nix/wm.kdl";
+    GTRASH_HOME_TRASH_DIR = "/home/nathaniel/use/trash";
     GTRASH_ONLY_HOME_TRASH = "true";
-    JUST_JUSTFILE = "$HOME/use/justfile";
+    JUST_JUSTFILE = "/home/nathaniel/use/justfile";
     FZF_DEFAULT_OPTS = "--no-mouse";
   };
 

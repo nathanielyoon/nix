@@ -34,9 +34,9 @@ binds {
         spawn "vol" "+"
     }
     /-XF86AudioMedia {}
-    /-XF86AudioPrev allow-when-locked=true {}
-    /-XF86AudioPlay allow-when-locked=true {}
-    /-XF86AudioNext allow-when-locked=true {}
+    /-XF86AudioPrev {}
+    /-XF86AudioPlay {}
+    /-XF86AudioNext {}
     XF86MonBrightnessUp allow-when-locked=true {
         spawn "bri" "+"
     }
