@@ -46,9 +46,6 @@
             })
             inputs.helix.overlays.default
           ];
-
-        }
-        {
           home-manager = {
             useGlobalPkgs = true;
             useUserPackages = true;

@@ -13,6 +13,7 @@
     choose
     sd
     fzf
+    jq
     gtrash
     just
     zigpkgs.master
@@ -26,6 +27,7 @@
     GTRASH_HOME_TRASH_DIR = "$HOME/use/trash";
     GTRASH_ONLY_HOME_TRASH = "true";
     JUST_JUSTFILE = "$HOME/use/justfile";
+    FZF_DEFAULT_OPTS = "--no-mouse";
   };
 
   # Configure networking.

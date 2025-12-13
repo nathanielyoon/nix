@@ -18,9 +18,8 @@ in
       name = "vol";
       runtimeInputs = [ sd ];
       text = ''
-        NUMBERISH='^([[:digit:]]+(\.[[:digit:]]+)|\.[[:digit:]]+)[+-]$'
         if [[ $# -eq 0 ]]; then wpctl get-volume @DEFAULT_AUDIO_SINK@ | sd '^Volume: (\d+\.\d+)(?:( )\[(M)UTED\])?$' '$1$2$3'
-        elif [[ "$1" =~ $NUMBERISH ]]; then wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1"
+        elif [[ "$1" =~ ^[0-9]+(\.[0-9]+)?[+-]$ ]]; then wpctl set-volume @DEFAULT_AUDIO_SINK@ "$1"
         else
             case "$1" in
             "m") wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle ;;
@@ -35,23 +34,19 @@ in
     })
     (writeShellScriptBin "bri" ''
       FILE=/sys/class/backlight/amdgpu_bl1/brightness
-      PREV=$(<$FILE)
-      NUMERIC='^[0-9]{1,5}$'
-      if [[ $# -eq 0 ]]; then echo $PREV
-      elif [[ "$1" =~ $NUMERIC ]]; then NEXT=$1
+      if [[ $# -eq 0 ]]; then cat $FILE
       else
+        PREV=$(<$FILE)
         case "$1" in
         "+") NEXT=$((PREV + 1285)) ;;
         "-") NEXT=$((PREV - 1285)) ;;
+        *) NEXT=$1 ;;
         esac
       fi
-      if [[ $NEXT =~ $NUMERIC ]]; then sudo tee $FILE <<<"$NEXT"; fi
+      if [[ $NEXT =~ ^[0-9]{1,5}$ ]]; then sudo tee $FILE <<<"$NEXT"; fi
     '')
     (writeShellScriptBin "pwr" ''
       cat /sys/class/power_supply/BAT1/capacity
-    '')
-    (writeShellScriptBin "now" ''
-      date "+%I:%M:%S"
     '')
     wl-clipboard
     (writeShellScriptBin "unclip" ''
@@ -167,11 +162,7 @@ in
     hidden = true;
     ignores = [ ".git/" ];
   };
-  programs.fzf = enable [ ] {
-    enableBashIntegration = true;
-    defaultOptions = [ "--no-mouse" ];
-  };
-  programs.jq = enable [ ] { };
+  programs.fzf = enable [ "enableBashIntegration" ] true;
   programs.lsd = enable [ ] {
     enableBashIntegration = false;
     settings = {
@@ -186,13 +177,7 @@ in
     };
   };
   programs.mpv = enable [ ] { };
-  programs.nix-search-tv = enable [ "settings" ] {
-    indexes = [
-      "nixpkgs"
-      "home-manager"
-      "nixos"
-    ];
-  };
+  programs.nix-search-tv = enable [ "settings" "indexes" ] [ "nixpkgs" "home-manager" "nixos" ];
   home.file.".config/qalculate/qalc.cfg".text = ''
     [General]
     save_config=0
@@ -248,7 +233,6 @@ in
       "\\C-n" = "history-search-forward";
     };
     variables = {
-      blink-matching-paren = true;
       colored-stats = true;
       mark-symlinked-directories = true;
       match-hidden-files = false;
@@ -302,7 +286,7 @@ in
     videos = "$HOME/use/Desktop/videos";
   };
 
-  # Configure home-manager.
+  # Configure home manager.
   programs.home-manager = enable [ ] { };
   home = {
     stateVersion = "25.11";
