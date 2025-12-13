@@ -87,7 +87,7 @@
       ImproveSuggest = false;
     };
     HardwareAcceleration = true;
-    HttpAllowList = [
+    HttpAllowlist = [
       "http://localhost"
       "http://127.0.0.1"
       "http://0.0.0.0"
@@ -116,7 +116,6 @@
     };
   };
   programs.librewolf.policies.Preferences = {
-
     # Disable warning on `about:config` page.
     "browser.aboutConfig.showWarning" = true;
     # `Reject-all if possible, otherwise accept-all.`
