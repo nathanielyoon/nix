@@ -88,6 +88,7 @@
       "/var/log"
       "/var/lib/bluetooth"
       "/var/lib/fprint"
+      "/var/lib/iwd"
       "/var/lib/nixos"
       "/var/lib/systemd/coredump"
       "/var/lib/systemd/timers"
