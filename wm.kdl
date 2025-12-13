@@ -182,6 +182,7 @@ spawn-at-startup "wl-paste" "--watch" "cliphist" "store"
 prefer-no-csd
 screenshot-path "~/use/Desktop/pictures/screenshots/%Y-%m-%dT%H-%M-%S.png"
 environment {
+    NIRI_CONFIG "/home/nathaniel/nix/wm.kdl"
     TERM "wezterm"
     BROWSER "librewolf"
     OFFICE "libreoffice"
