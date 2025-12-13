@@ -218,10 +218,6 @@
     in
     [
       {
-        name = "nix";
-        auto-format = true;
-      }
-      {
         name = "bash";
         indent = {
           tab-width = 4;
@@ -326,39 +322,6 @@
         name = "markdown";
         formatter = deno-fmt "md";
         language-servers = [ "marksman" ];
-        auto-format = true;
-      }
-      {
-        name = "css";
-        formatter = deno-fmt "css";
-        auto-format = true;
-      }
-      {
-        name = "c";
-        auto-format = true;
-      }
-      {
-        name = "cpp";
-        auto-format = true;
-      }
-      {
-        name = "python";
-        auto-format = true;
-      }
-      {
-        name = "kdl";
-        auto-format = true;
-      }
-      {
-        name = "lua";
-        formatter = {
-          command = "stylua";
-          args = [ "-" ];
-        };
-        auto-format = true;
-      }
-      {
-        name = "zig";
         auto-format = true;
       }
     ];
