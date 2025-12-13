@@ -23,9 +23,9 @@
   environment.variables = {
     WEZTERM_CONFIG_FILE = "$HOME/nix/term.lua";
     NIRI_CONFIG = "$HOME/nix/wm.kdl";
-    GTRASH_HOME_TRASH_DIR = "$HOME/sys/trash";
+    GTRASH_HOME_TRASH_DIR = "$HOME/use/trash";
     GTRASH_ONLY_HOME_TRASH = "true";
-    JUST_JUSTFILE = "$HOME/sys/justfile";
+    JUST_JUSTFILE = "$HOME/use/justfile";
   };
 
   # Configure networking.

@@ -102,8 +102,8 @@
         "all"
         "job"
         "nix"
-        "sys"
         "tmp"
+        "use"
       ];
       files = [ ".config/gh/hosts.yml" ];
     };

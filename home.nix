@@ -213,7 +213,7 @@ in
 
   # Configure bash.
   programs.bash = enable [ ] {
-    historyFile = "$HOME/sys/histfile";
+    historyFile = "$HOME/use/histfile";
     historyControl = [
       "ignoreboth"
       "erasedups"
@@ -290,7 +290,7 @@ in
 
   # Configure desktop.
   home.file.".icons/default".source = "${pkgs.vanilla-dmz}/share/icons/Vanilla-DMZ";
-  services.wpaperd = enable [ "settings" "default" "path" ] "/home/nathaniel/sys/leo.jpeg";
+  services.wpaperd = enable [ "settings" "default" "path" ] "/home/nathaniel/use/leo.jpeg";
   xdg.userDirs = enable [ ] {
     desktop = "$HOME/all/Desktop";
     documents = "$HOME/all/Desktop/documents";
