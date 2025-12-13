@@ -5,6 +5,111 @@
     enable = true;
     defaultEditor = true;
   };
+
+  # Remove blink from primary cursor.
+  programs.helix.themes.base = {
+    inherits = "base16_transparent";
+    "ui.cursor.primary".modifiers = [ "reversed" ];
+  };
+  programs.helix.settings.theme = "base";
+
+  # Configure editor settings.
+  programs.helix.settings.editor = {
+    scrolloff = 0;
+    scroll-lines = 2;
+    line-number = "relative";
+    gutters = [
+      "line-numbers"
+      "diff"
+    ];
+    completion-timeout = 5;
+    completion-trigger-len = 1;
+    completion-replace = true;
+    trim-final-newlines = true;
+    popup-border = "popup";
+    end-of-line-diagnostics = "hint";
+    statusline = {
+      left = [
+        "total-line-numbers"
+        "file-name"
+        "read-only-indicator"
+        "file-modification-indicator"
+      ];
+      right = [
+        "diagnostics"
+        "register"
+        "selections"
+        "primary-selection-length"
+        "position"
+      ];
+    };
+    lsp.auto-signature-help = false;
+    cursor-shape = {
+      normal = "block";
+      insert = "bar";
+      select = "underline";
+    };
+    soft-wrap.enable = true;
+    inline-diagnostics.cursor-line = "warning";
+  };
+
+  # Configure keymap.
+  programs.helix.settings.keys =
+    let
+      insert = {
+        "C-v" = "signature_help";
+        "C-h" = ":toggle-option lsp.display-inlay-hints";
+      };
+      normal = insert // {
+        "Y" = "yank_joined";
+        "a" = [
+          "append_mode"
+          "collapse_selection"
+        ];
+        "i" = [
+          "insert_mode"
+          "collapse_selection"
+        ];
+        "~" = "switch_to_lowercase";
+        "`" = "switch_case";
+        "x" = "extend_line_below";
+        "X" = "extend_line_above";
+      };
+    in
+    {
+      normal = normal // {
+        "H" = [
+          "ensure_selections_forward"
+          "flip_selections"
+          "goto_first_nonwhitespace"
+        ];
+        "L" = [
+          "ensure_selections_forward"
+          "goto_line_end"
+        ];
+        "'" = [
+          "select_mode"
+          "no_op"
+          "repeat_last_motion"
+          "normal_mode"
+        ];
+      };
+      select = normal // {
+        "H" = [
+          "ensure_selections_forward"
+          "flip_selections"
+          "goto_first_nonwhitespace"
+        ];
+        "L" = [
+          "ensure_selections_forward"
+          "goto_line_end"
+        ];
+        "'" = "repeat_last_motion";
+      };
+      insert = insert;
+    };
+
+  # Add language support.
   home.packages = with pkgs; [
     nil
     nixfmt-rfc-style
@@ -27,106 +132,6 @@
     lua-language-server
     stylua
   ];
-  programs.helix.themes.base = {
-    inherits = "base16_transparent";
-    "ui.cursor.primary".modifiers = [ "reversed" ];
-  };
-  programs.helix.settings = {
-    theme = "base";
-    editor = {
-      scrolloff = 0;
-      scroll-lines = 2;
-      line-number = "relative";
-      gutters = [
-        "line-numbers"
-        "diff"
-      ];
-      completion-timeout = 5;
-      completion-trigger-len = 1;
-      completion-replace = true;
-      color-modes = true;
-      trim-final-newlines = true;
-      popup-border = "popup";
-      end-of-line-diagnostics = "hint";
-      statusline = {
-        left = [
-          "total-line-numbers"
-          "file-name"
-          "read-only-indicator"
-          "file-modification-indicator"
-        ];
-        right = [
-          "diagnostics"
-          "register"
-          "selections"
-          "primary-selection-length"
-          "position"
-        ];
-      };
-      lsp.auto-signature-help = false;
-      cursor-shape = {
-        normal = "block";
-        insert = "bar";
-        select = "underline";
-      };
-      soft-wrap.enable = true;
-      inline-diagnostics.cursor-line = "warning";
-    };
-    keys =
-      let
-        insert = {
-          "C-v" = "signature_help";
-          "C-h" = ":toggle-option lsp.display-inlay-hints";
-        };
-        normal = insert // {
-          "Y" = "yank_joined";
-          "a" = [
-            "append_mode"
-            "collapse_selection"
-          ];
-          "i" = [
-            "insert_mode"
-            "collapse_selection"
-          ];
-          "~" = "switch_to_lowercase";
-          "`" = "switch_case";
-          "x" = "extend_line_below";
-          "X" = "extend_line_above";
-        };
-      in
-      {
-        normal = normal // {
-          "H" = [
-            "select_mode"
-            "ensure_selections_forward"
-            "flip_selections"
-            "goto_first_nonwhitespace"
-          ];
-          "L" = [
-            "select_mode"
-            "ensure_selections_forward"
-            "goto_line_end"
-          ];
-          "'" = [
-            "select_mode"
-            "repeat_last_motion"
-          ];
-        };
-        select = normal // {
-          "H" = [
-            "ensure_selections_forward"
-            "flip_selections"
-            "goto_first_nonwhitespace"
-          ];
-          "L" = [
-            "ensure_selections_forward"
-            "goto_line_end"
-          ];
-          "'" = "repeat_last_motion";
-        };
-        insert = insert;
-      };
-  };
   programs.helix.languages.language-server = {
     deno-lsp = {
       command = "deno";
