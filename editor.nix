@@ -206,6 +206,7 @@
   '';
   programs.helix.languages.language =
     let
+      auto-fmt = name: rest: { inherit name; auto-format = true; } // rest;
       deno-fmt = extension: {
         command = "deno";
         args = [
@@ -217,6 +218,7 @@
       };
     in
     [
+      (auto-fmt "nix" {})
       {
         name = "bash";
         indent = {
